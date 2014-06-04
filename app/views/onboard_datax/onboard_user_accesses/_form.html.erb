@@ -1,0 +1,27 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %>
+<%= simple_form_for @onboard_user_access do |f| %>    
+ 
+  <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} if @project %>
+  <%= f.input :project_id, :as => :hidden, :input_html => {:value => @project.id} if @project %>
+  <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine.present? %> 
+  <%= f.input :engine_id, :as => :hidden, :input_html => {:value => @engine.id} if @engine %>
+  <%= f.input :user_access_id, :as => :hidden, :input_html => {:value => @user_access.id}  if @user_access %> 
+  <%= f.input :access_desp, :label => t('Access Desp'), :readonly => true, :input_html => {value: @user_access.access_desp} if @user_access %> 
+  <%= f.input :action, :label => t('Access Action'), :readonly => true, :input_html => {value: @user_access.action} if @user_access %> 
+  <%= f.input :resource, :label => t('Resource'), :readonly => true, :input_html => {value: @user_access.resource} if @user_access %>
+  <%= f.input :sql_code, :label => t('SQL Code'), :readonly => true, :input_html => {:value => @user_access.sql_code, rows: 3} if @user_access %> 
+  <%= f.input :role_definition_id, :label => t('Role Definition'), :collection => OnboardDatax.project_misc_definition_class.where(definition_category: 'role_definition').order('ranking_index'), :label_method => :name, :value_method => :id, :include_blank => true %> 
+  <%= f.input :masked_attrs, :label => t('Masked Attributes'), :readonly => true, :input_html => {:value => @user_access.masked_attrs} if @user_access %>   
+  <%= f.input :brief_note, :label => t('Brief Note'), :readonly => true, :input_html => {:value => @user_access.brief_note} if @user_access %> 
+  <%= f.input :rank, :label => t('Rank'), :readonly => true, :input_html => {:value => @user_access.rank} if @user_access %>
+  
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save') , :class => BUTTONS_CLS['action'] %>  
+<% end %>  
+
+<% end %> 
+
+

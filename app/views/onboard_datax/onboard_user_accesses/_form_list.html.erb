@@ -1,0 +1,56 @@
+<% if @view_in_config && @erb_code %>
+<%= render inline: ERB.new(@erb_code).result(binding) %>
+<% else %>
+
+<div id="main_body">
+<h1><%=@title %></h1>
+<%=t('Project Name')%>=<%=@project.name if @project %>
+<div class="pagination"><%= will_paginate models %></div>
+<table class="table table-striped">
+	<%=t('Download')%>: <%= link_to "CSV", onboard_user_accesses_path(format: "csv") %>
+  <tr>
+    <th>#</th>
+    <th><%=t('Action')%></th>
+    <th><%=t('Resource')%></th>    
+    <th><%=t('Brief Note')%></th>
+    <th><%=t('Last Updated By')%></th>
+    <th><%=t('Role Definition')%></th>
+    <th><%=t('SQL Code')%></th>
+    <th><%=t('Masked Attrs')%></th>
+    <th><%=t('Rank')%></th>     
+    <th><%=t('Created At')%></th>
+    <th><%=t('Updated At')%></th>
+    <th></th>
+ 
+  </tr>
+
+<% models.each do |r| %>
+  <tr>
+  	<% base_config = OnboardDatax.user_access_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(r.id).user_access_id) %>
+  	<% engine=OnboardDatax.engine_class.find_by_id(r.engine_id) %>
+  	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_user_access_path(r)}"  %></td> 
+  	<td><%= base_config.action %></td>
+  	<td><%= base_config.resource %></td>	
+    <td><%= base_config.brief_note %></td>   
+    <td><%= r.last_updated_by.name %></td> 
+    <td><%= r.role_definition.name %></td>
+    <td><%= base_config.sql_code  %></td>
+    <td><%= base_config.masked_attrs %></td>
+    <td><%= base_config.rank %></td>
+    <td><%= r.created_at %></td>
+  	<td><%= r.updated_at %></td>
+  	<td><%= link_to 'Edit', SUBURI + "/view_handler?index=1&url=#{edit_onboard_user_access_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
+
+  </tr>
+<% end %>
+   <table class="table table-striped">
+	  <tr>
+	    <th>
+  		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  		 &nbsp;<%= link_to t('New Onboard User Access'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_user_access_path(:user_access_id => @user_access.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @user_access && @project && @engine && has_action_right?('create', params[:controller]) %>
+        </th>
+	  </tr>
+	</table> 
+</div>
+
+<% end %>

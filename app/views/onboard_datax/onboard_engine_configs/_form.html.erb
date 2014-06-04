@@ -1,0 +1,23 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %>
+<%= simple_form_for @onboard_engine_config do |f| %>    
+ 
+  <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} %>
+  <%= f.input :argument_value, :label => t('Argument Value'),:readonly => true, :input_html => {:value => @engine_config.argument_value} %>   
+  <%= f.input :custom_argument_value, :label => t('Custom Argument Value'), :input_html => {:rows => 20} %>  
+  <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine %> 
+  <%= f.input :argument_desp, :label => t('Argument Desp'), :readonly => true, :input_html => {:value => @engine_config.argument_desp} %> 
+  <%= f.input :argument_name, :label => t('Argument Name'), :readonly => true, :input_html => {:value => @engine_config.argument_name} %>
+  <%= f.input :engine_version, :label => t('Engine Version'), :readonly => true, :input_html => {:value => @engine.version} %> 
+  <%= f.input :global, :label => t('Global'), :input_html => {:value => (@engine_config.global ? t('Yes') : t('No'))}, :readonly => true %> 
+  <%= f.input :brief_note, :label => t('Brief Note'), :readonly => true, :input_html => {:rows => 3} %>  
+  
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save') , :class => BUTTONS_CLS['action'] %>  
+<% end %> 
+
+<% end %> 
+
+

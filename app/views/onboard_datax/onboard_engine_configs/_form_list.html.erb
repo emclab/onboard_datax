@@ -1,0 +1,54 @@
+<% if @view_in_config && @erb_code %>
+<%= render inline: ERB.new(@erb_code).result(binding) %>
+<% else %>
+
+<div id="main_body">
+<h1><%=@title %></h1>
+<%=t('Project Name')%>=<%=@project.name if @project %>
+<div class="pagination"><%= will_paginate models %></div> 
+<table class="table table-striped">
+  <%=t('Download')%>: <%= link_to "CSV", onboard_engine_configs_path(format: "csv") %>
+  <tr>
+    <th>#</th>
+    <th><%=t('Engine Name')%></th>
+    <th><%=t('Engine Version')%></th>    
+    <th><%=t('Argument Name')%></th>
+    <th><%=t('Argument Value')%></th>
+    <th><%=t('Last Updated By ID')%></th>
+    <th><%=t('Created At')%></th>
+    <th><%=t('Updated At')%></th>
+    <th><%=t('Brief Note')%></th>
+    <th><%=t('Global')%></th>     
+    <th></th>
+ 
+  </tr>
+
+<% models.each do |r| %>
+  <tr>
+  	<% base_config = OnboardDatax.engine_config_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(r.id).engine_config_id) %>
+  	<% engine=OnboardDatax.engine_class.find_by_id(r.engine_id) %>
+  	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_engine_config_path(r)}"  %></td> 
+  	<td><%= engine.name %></td>
+  	<td><%= engine.version %></td>	
+    <td><%= base_config.argument_name %></td>   
+    <td><%= r.custom_argument_value.present? ? r.custom_argument_value : base_config.argument_value %></td>
+    <td><%= r.last_updated_by_id %></td> 
+    <td><%= r.created_at %></td>
+  	<td><%= r.updated_at %></td>
+  	<td><%= base_config.brief_note  %></td>
+    <td><%= base_config.global ? t('Yes') : t('No') %></td>
+    <td><%= link_to 'Edit', SUBURI + "/view_handler?index=1&url=#{edit_onboard_engine_config_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
+
+  </tr>
+<% end %>
+   <table class="table table-striped">
+	  <tr>
+	    <th>
+  		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  		 &nbsp;<%= link_to t('New Onboard Engine Config'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_engine_config_path(:engine_config_id => @engine_config.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @engine_config && @project && @engine && has_action_right?('create', params[:controller]) %>
+        </th>
+	  </tr>
+	</table> 
+</div>
+
+<% end %>

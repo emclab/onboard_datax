@@ -1,0 +1,22 @@
+<% if @view_in_config && @erb_code %>
+  <%= render inline: @erb_code %>
+  
+<% else %>
+<%= simple_form_for @onboard_engine_init do |f| %>    
+ 
+  <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} %>
+  <%= f.input :project_id, :as => :hidden, :input_html => {:value => @project.id} %>
+  <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine.present? %> 
+  <%= f.input :engine_init_id, :as => :hidden, :input_html => {:value => @engine_init.id}  if @engine_init %> 
+  <%= f.input :engine_id, :as => :hidden, :input_html => {:value => @engine.id} if @engine.present? %>
+  <%= f.input :init_desp, :label => t('Init Desp'), :readonly => true, :input_html => {:rows => 3} %> 
+  <%= f.input :file_name, :label => t('File Name'),  :readonly => true %>
+  <%= f.input :init_code, :label => t('Init Code'), :readonly => true, :input_html => {:rows => 10} %>   
+  
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+  <%= f.button :submit, t('Save') , :class => BUTTONS_CLS['action'] %>  
+<% end %>  
+
+<% end %>
+
+
