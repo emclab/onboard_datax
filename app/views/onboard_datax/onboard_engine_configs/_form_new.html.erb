@@ -8,7 +8,7 @@
   <%= f.input :project_id, :as => :hidden, :input_html => {:value => @project.id} if @project %>
   <%= f.input :engine_id, :as => :hidden, :input_html => {:value => @engine.id}  if @engine %> 
   <%= f.input :engine_config_id, :as => :hidden, :input_html => {:value => @engine_config.id}  if @engine_config %> 
-  <%= f.input :argument_value, :label => t('Argument Value'),:readonly => true, :input_html => {:value => @engine_config.argument_value} if @engine_config %>   
+  <%= f.input :argument_value, :label => t('Argument Value'), :readonly => true, :input_html => {:rows => 5, :value => @engine_config.argument_value}, as: :text if @engine_config %>   
   <%= f.input :custom_argument_value, :label => t('Custom Argument Value'), :input_html => {:rows => 20} %>  
   <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine %> 
   <%= f.input :argument_desp, :label => t('Argument Desp'), :readonly => true, :input_html => {:value => @engine_config.argument_desp} if @engine_config%> 

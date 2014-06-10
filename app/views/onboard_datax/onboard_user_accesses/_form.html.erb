@@ -12,7 +12,7 @@
   <%= f.input :access_desp, :label => t('Access Desp'), :readonly => true, :input_html => {value: @user_access.access_desp} if @user_access %> 
   <%= f.input :action, :label => t('Access Action'), :readonly => true, :input_html => {value: @user_access.action} if @user_access %> 
   <%= f.input :resource, :label => t('Resource'), :readonly => true, :input_html => {value: @user_access.resource} if @user_access %>
-  <%= f.input :sql_code, :label => t('SQL Code'), :readonly => true, :input_html => {:value => @user_access.sql_code, rows: 3} if @user_access %> 
+  <%= f.input :sql_code, :label => t('SQL Code'), :readonly => true, :input_html => {:value => @user_access.sql_code, rows: 3}, as: :text if @user_access %> 
   <%= f.input :role_definition_id, :label => t('Role Definition'), :collection => OnboardDatax.project_misc_definition_class.where(definition_category: 'role_definition').order('ranking_index'), :label_method => :name, :value_method => :id, :include_blank => true %> 
   <%= f.input :masked_attrs, :label => t('Masked Attributes'), :readonly => true, :input_html => {:value => @user_access.masked_attrs} if @user_access %>   
   <%= f.input :brief_note, :label => t('Brief Note'), :readonly => true, :input_html => {:value => @user_access.brief_note} if @user_access %> 

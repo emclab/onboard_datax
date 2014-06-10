@@ -5,7 +5,7 @@
 <%= simple_form_for @onboard_engine_config do |f| %>    
  
   <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} %>
-  <%= f.input :argument_value, :label => t('Argument Value'),:readonly => true, :input_html => {:value => @engine_config.argument_value} %>   
+  <%= f.input :argument_value, :label => t('Argument Value'),:readonly => true, :input_html => {:value => @engine_config.argument_value, :rows => 5 , as: :text} %>   
   <%= f.input :custom_argument_value, :label => t('Custom Argument Value'), :input_html => {:rows => 20} %>  
   <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine %> 
   <%= f.input :argument_desp, :label => t('Argument Desp'), :readonly => true, :input_html => {:value => @engine_config.argument_desp} %> 
