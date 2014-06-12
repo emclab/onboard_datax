@@ -45,7 +45,10 @@
 	  <tr>
 	    <th>
   		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  		 &nbsp;<%= link_to t('New Onboard Engine Config'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_engine_config_path(:engine_config_id => @engine_config.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @engine_config && @project && @engine && has_action_right?('create', params[:controller]) %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	  <%= link_to t('Search'), SUBURI + "/authentify/view_handler?index=1&url=#{search_onboard_engine_configs_path}", :class => BUTTONS_CLS['action'] if has_action_right?('search', params[:controller]) %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= link_to t('New Onboard Engine Config'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_engine_config_path(:engine_config_id => @engine_config.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @engine_config && @project && @engine && has_action_right?('create', params[:controller]) %>
         </th>
 	  </tr>
 	</table> 
