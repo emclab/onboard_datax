@@ -133,7 +133,7 @@ describe "LinkTests" do
       #no bad data
       visit onboard_engine_configs_path()
       save_and_open_page
-      page.should have_content('argument value 230')
+      page.should have_content('argument value 230'[0..5])
     end
     
     it "works for user access" do
