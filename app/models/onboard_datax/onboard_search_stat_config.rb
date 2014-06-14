@@ -32,27 +32,29 @@ module OnboardDatax
         header = ['id', 'resource_name', 'stat_function', 'stat_summary_function', 'labels_and_fields', 'time_frame', 'search_list_form', 'search_where', 'search_results_period_limit', 
                   'last_updated_by_id', 'brief_note', 'created_at', 'updated_at',  'stat_header', 'search_params', 'search_summary_function']        
         csv << header
+        i = 1
         all.each do |config|
           #assembly array for the row
-          base = OnboardDatax.search_stat_config_class.find_by_id(config.attributes.values_at('search_stat_config_id')[0].to_i)
+          base = OnboardDatax.search_stat_config_class.find_by_id(config.search_stat_config_id)
           row = Array.new
-          row << config.attributes.values_at('id')[0]
+          row << i
           row << base.stat_function
-          row << (config.attributes.values_at('custom_stat_summary_function')[0].present? ? config.attributes_values_at('custom_stat_summary_function')[0] : base.stat_summary_function)
+          row << (config.custom_stat_summary_function.present? ? config.custom_stat_summary_function : base.stat_summary_function)
           row << base.labels_and_fields
           row << base.time_frame
           row << base.search_list_form
           row << base.search_where
           row << base.search_results_period_limit
-          row << config.attributes.values_at('last_updated_by_id')[0]
+          row << config.last_updated_by_id
           row << base.brief_note
-          row << config.attributes.values_at('created_at')[0]
-          row << config.attributes.values_at('updated_at')[0]
-          row << (config.attributes.values_at('custom_stat_header')[0].present? ? config.attributes_values_at('custom_stat_header')[0] : base.stat_header)
+          row << config.created_at
+          row << config.updated_at
+          row << (config.custom_stat_header.present? ? config.custom_stat_header : base.stat_header)
           row << base.search_params
-          row << (config.attributes.values_at('custom_search_summary_function')[0].present? ? config.attributes_values_at('custom_search_summary_function')[0] : base.search_summary_function)
+          row << (config.custom_search_summary_function.present? ? config.custom_search_summary_function : base.search_summary_function)
           #inject to csv
           csv << row
+          i += 1
         end
       end
     end

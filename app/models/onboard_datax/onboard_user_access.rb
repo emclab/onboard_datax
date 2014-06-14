@@ -28,23 +28,25 @@ module OnboardDatax
         #header array
         header = ['id', 'action', 'resource', 'brief_note', 'last_updated_by_id', 'role_definition_id', 'sql_code', 'masked_attrs', 'rank', 'created_at', 'updated_at']        
         csv << header
+        i = 1
         all.each do |config|
           #assembly array for the row
-          base = OnboardDatax.user_access_class.find_by_id(config.attributes.values_at('user_access_id')[0].to_i)
+          base = OnboardDatax.user_access_class.find_by_id(config.user_access_id)
           row = Array.new
-          row << config.attributes.values_at('id')[0]
+          row << i
           row << base.action
           row << base.resource
           row << base.brief_note
-          row << config.attributes.values_at('last_updated_by_id')[0]
-          row << config.attributes.values_at('role_definition_id')[0]
+          row << config.last_updated_by_id
+          row << config.role_definition_id
           row << base.sql_code
           row << base.masked_attrs
           row << base.rank
-          row << config.attributes.values_at('created_at')[0]
-          row << config.attributes.values_at('updated_at')[0]
+          row << config.created_at
+          row << config.updated_at
           #inject to csv
           csv << row
+          i += 1
         end
       end
     end

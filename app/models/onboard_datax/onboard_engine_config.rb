@@ -27,22 +27,24 @@ module OnboardDatax
         #header array
         header = ['id', 'engine_name', 'engine_version', 'argument_name', 'argument_value', 'last_updated_by_id', 'created_at', 'updated_at', 'brief_note', 'global']        
         csv << header
+        i = 1
         all.each do |config|
           #assembly array for the row
-          base = OnboardDatax.engine_config_class.find_by_id(config.attributes.values_at('engine_config_id')[0].to_i)
+          base = OnboardDatax.engine_config_class.find_by_id(config.engine_config_id)
           row = Array.new
-          row << config.attributes.values_at('id')[0]
+          row << i
           row << (base.global ? nil : base.engine.name)
           row << base.engine_version
           row << base.argument_name
-          row << (config.attributes.values_at('custom_argument_value')[0].present? ? config.attributes_values_at('custom_argument_value')[0] : base.argument_value)
-          row << config.attributes.values_at('last_updated_by_id')[0]
-          row << config.attributes.values_at('created_at')[0]
-          row << config.attributes.values_at('updated_at')[0]
+          row << (config.custom_argument_value.present? ? config.custom_argument_value : base.argument_value)
+          row << config.last_updated_by_id
+          row << config.created_at
+          row << config.updated_at
           row << base.brief_note
           row << (base.global ? 't' : 'f')
           #inject to csv
           csv << row
+          i += 1
         end
       end
     end
