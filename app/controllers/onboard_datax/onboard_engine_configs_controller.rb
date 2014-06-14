@@ -74,7 +74,7 @@ module OnboardDatax
     protected
     def load_record
       @engine_config = OnboardDatax.engine_config_class.find_by_id(params[:engine_config_id].to_i) if params[:engine_config_id].present?
-      @engine_config = OnboardDatax.engine_config_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id].to_i)) if params[:id].present?
+      @engine_config = OnboardDatax.engine_config_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id].to_i).engine_config_id) if params[:id].present?
       @project = OnboardDatax.project_class.find_by_id(params[:project_id]) if params[:project_id].present?
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
