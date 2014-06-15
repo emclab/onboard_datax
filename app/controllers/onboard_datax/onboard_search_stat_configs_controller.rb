@@ -9,13 +9,15 @@ module OnboardDatax
       @title = t('Onboard Search/Stat Configs')
       @onboard_search_stat_configs =  params[:onboard_datax_onboard_search_stat_configs][:model_ar_r]
       @onboard_search_stat_configs = @onboard_search_stat_configs.where('onboard_datax_onboard_search_stat_configs.project_id = ?', @project.id) if @project
-      @onboard_search_stat_configs = @onboard_search_stat_configs.where('onboard_datax_onboard_search_stat_configs.engine_id = ?', @engine.id) if @engine
-      @onboard_search_stat_configs = @onboard_search_stat_configs.page(params[:page]).per_page(@max_pagination)
+      @onboard_search_stat_configs = @onboard_search_stat_configs.where('onboard_datax_onboard_search_stat_configs.engine_id = ?', @engine.id) if @engine      
       @erb_code = find_config_const('onboard_search_stat_config_index_view', 'onboard_datax')
       #for csv download
       respond_to do |format|
-        format.html
-        format.csv { send_data @onboard_search_stat_configs.to_csv }
+        format.html {@onboard_search_stat_configs = @onboard_search_stat_configs.page(params[:page]).per_page(@max_pagination)}
+        format.csv do
+          send_data @onboard_search_stat_configs.to_csv
+          @csv = true
+        end
       end
     end
 
