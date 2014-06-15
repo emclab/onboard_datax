@@ -10,12 +10,14 @@ module OnboardDatax
       @onboard_user_accesses =  params[:onboard_datax_onboard_user_accesses][:model_ar_r]
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.project_id = ?', @project.id) if @project
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.engine_id = ?', @engine.id) if @engine
-      @onboard_user_accesses = @onboard_user_accesses.page(params[:page]).per_page(@max_pagination)
       @erb_code = find_config_const('onboard_user_access_index_view', 'onboard_datax')
       #for csv download
       respond_to do |format|
-        format.html
-        format.csv { send_data @onboard_user_accesses.to_csv }
+        format.html {@onboard_user_accesses = @onboard_user_accesses.page(params[:page]).per_page(@max_pagination)}
+        format.csv do
+          send_data @onboard_user_accesses.to_csv
+          @csv = true
+        end
       end
     end
 
