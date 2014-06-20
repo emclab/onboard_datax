@@ -1,5 +1,6 @@
 module OnboardDatax
   class OnboardEngineConfig < ActiveRecord::Base
+    self.primary_key = :id
     attr_accessor :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, :global, :engine_version, :last_updated_by_name, :engine_name
     attr_accessible :engine_config_id, :project_id, :custom_argument_value, :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, 
                     :global, :engine_version, :engine_id, :engine_name,
