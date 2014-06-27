@@ -8,7 +8,7 @@
 <%=t('# of records')%>=<%=models.count if models %>
 <div class="pagination"><%= will_paginate models unless @csv %></div> 
 <table class="table table-striped">
-  <%=t('Download')%>: <%= link_to "CSV", onboard_engine_configs_path(format: "csv") %>
+  <%=t('Download')%>: <%= link_to "CSV", onboard_engine_configs_path(format: "csv", :project_id => @project.id) if @project %>
   <tr>
     <th>#</th>
     <th><%=t('Engine Name')%></th>
