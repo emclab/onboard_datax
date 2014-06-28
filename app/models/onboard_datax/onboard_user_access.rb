@@ -38,7 +38,7 @@ module OnboardDatax
           row << base.resource
           row << base.brief_note
           row << config.last_updated_by_id
-          row << config.role_definition_id
+          row << OnboardDatax.project_misc_definition_class.find_by_id(config.role_definition_id).ranking_index  #config.role_definition_id
           row << base.sql_code
           row << base.masked_attrs
           row << base.rank
