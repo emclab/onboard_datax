@@ -155,7 +155,7 @@ describe "LinkTests" do
       page.should have_content('Onboard User Access Info')
       
       #new
-      visit new_onboard_user_access_path()
+      visit new_onboard_user_access_path(:project_id => @proj.id)
       #save_and_open_page
       page.should have_content('New Onboard User Access')
       #no fill in at all for new
