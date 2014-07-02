@@ -49,6 +49,8 @@
 	    <th>
   		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
   		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= link_to t('Copy'), SUBURI + "/authentify/view_handler?index=1&url=#{copy_onboard_user_accesses_path(project_id: @project.id)}", :class => BUTTONS_CLS['action'] if @project && has_action_right?('copy', params[:controller]) %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     	  <%= link_to t('Search'), SUBURI + "/authentify/view_handler?index=1&url=#{search_onboard_user_accesses_path}", :class => BUTTONS_CLS['action'] if has_action_right?('search', params[:controller]) %>
   		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   		  <%= link_to t('New Onboard User Access'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_user_access_path(:user_access_id => @user_access.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @user_access && @project && @engine && has_action_right?('create', params[:controller]) %>

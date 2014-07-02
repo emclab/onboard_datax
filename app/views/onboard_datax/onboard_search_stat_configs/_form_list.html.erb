@@ -58,7 +58,10 @@
 	  <tr>
 	    <th>
   		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  		 &nbsp;<%= link_to t('New Onboard Search/Stat Config'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_search_stat_config_path(:search_stat_config_id => @search_stat_config.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @search_stat_config && @project && @engine && has_action_right?('create', params[:controller]) %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= link_to t('Copy'), SUBURI + "/authentify/view_handler?index=1&url=#{copy_onboard_search_stat_configs_path(project_id: @project.id)}", :class => BUTTONS_CLS['action'] if @project && has_action_right?('copy', params[:controller]) %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= link_to t('New Onboard Search/Stat Config'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_search_stat_config_path(:search_stat_config_id => @search_stat_config.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @search_stat_config && @project && @engine && has_action_right?('create', params[:controller]) %>
         </th>
 	  </tr>
 	</table> 

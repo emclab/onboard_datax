@@ -3,6 +3,8 @@ OnboardDatax::Engine.routes.draw do
     collection do
       get :search
       get :search_results  
+      get :copy
+      get :copy_results
     end
   end
   resources :onboard_engine_inits do
@@ -14,13 +16,17 @@ OnboardDatax::Engine.routes.draw do
   resources :onboard_user_accesses do
     collection do
       get :search
-      get :search_results  
+      get :search_results 
+      get :copy 
+      get :copy_results
     end
   end
   resources :onboard_search_stat_configs do
     collection do
       get :search
-      get :search_results  
+      get :search_results 
+      get :copy 
+      get :copy_results
     end
   end
 

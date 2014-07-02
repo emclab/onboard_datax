@@ -75,6 +75,29 @@ module OnboardDatax
       redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
     end
     
+    def copy
+      @title = t('Copy from Another Project')
+      @from_projects = OnboardDatax.project_class.where('id != ?', @project.id).order('id DESC')
+      @erb_code = find_config_const('onboard_user_access_copy_view', 'onboard_datax')
+    end
+    
+    def copy_results
+      project_id = params[:save].keys[0]
+      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id']).each do |base|
+        onboard_item = OnboardDatax::OnboardUserAccess.new
+        onboard_item.user_access_id = base.user_access_id
+        onboard_item.engine_id = base.engine_id
+        onboard_item.project_id = project_id
+        onboard_item.last_updated_by_id = session[:user_id]
+        begin
+          onboard_item.save
+        rescue => e
+          flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
+        end
+      end unless params['single_id'].blank?
+      redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: project_id)}"
+    end
+    
     protected
     def load_record
       @user_access = OnboardDatax.user_access_class.find_by_id(params[:user_access_id].to_i) if params[:user_access_id].present?

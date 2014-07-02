@@ -73,6 +73,32 @@ module OnboardDatax
       redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
     end
     
+    def copy
+      @title = t('Copy from Another Project')
+      @from_projects = OnboardDatax.project_class.where('id != ?', @project.id).order('id DESC')
+      @erb_code = find_config_const('onboard_search_stat_config_copy_view', 'onboard_datax')
+    end
+    
+    def copy_results
+      project_id = params[:save].keys[0]
+      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id']).each do |base|
+        onboard_item = OnboardDatax::OnboardSearchStatConfig.new
+        onboard_item.search_stat_config_id = base.search_stat_config_id
+        onboard_item.engine_id = base.engine_id
+        onboard_item.project_id = project_id
+        onboard_item.custom_stat_summary_function = base.custom_stat_summary_function
+        onboard_item.custom_search_summary_function = base.custom_search_summary_function
+        onboard_item.custom_stat_header = base.custom_stat_header
+        onboard_item.last_updated_by_id = session[:user_id]
+        begin
+          onboard_item.save
+        rescue => e
+          flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
+        end
+      end unless params['single_id'].blank?
+      redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_search_stat_configs_path(project_id: project_id)}"
+    end
+    
     protected
     def load_record
       @search_stat_config = OnboardDatax.search_stat_config_class.find_by_id(params[:search_stat_config_id].to_i) if params[:search_stat_config_id].present?
