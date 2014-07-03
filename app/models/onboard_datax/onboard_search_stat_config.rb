@@ -38,6 +38,7 @@ module OnboardDatax
           base = OnboardDatax.search_stat_config_class.find_by_id(config.search_stat_config_id)
           row = Array.new
           row << i
+          row << base.resource_name
           row << base.stat_function
           row << (config.custom_stat_summary_function.present? ? config.custom_stat_summary_function : base.stat_summary_function)
           row << base.labels_and_fields

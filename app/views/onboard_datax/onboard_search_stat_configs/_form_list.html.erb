@@ -37,7 +37,7 @@
   	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_search_stat_config_path(r)}"  %></td> 
   	<td><%= base_config.resource_name %></td>
   	<td><%= base_config.stat_function %></td>	
-    <td><%= r.custom_stat_summary_function.present? ? r.custom_stat_summary_function : base_config.stat_summary_function %></td>
+    <td><%= r.custom_stat_summary_function.present? ? r.custom_stat_summary_function[0..5] : base_config.stat_summary_function[0..5] %></td>
     <td><%= base_config.labels_and_fields %></td>	
     <td><%= base_config.time_frame %></td>	
     <td><%= base_config.search_list_form %></td>	
@@ -47,9 +47,9 @@
     <td><%= base_config.brief_note  %></td>
     <td><%= r.created_at %></td>
   	<td><%= r.updated_at %></td>
-  	<td><%= r.custom_stat_header.present? ? r.custom_stat_header : base_config.stat_header %></td>
-    <td><%= base_config.search_params  %></td>
-    <td><%= r.custom_search_summary_function.present? ? r.custom_search_summary_function : base_config.search_summary_function %></td>
+  	<td><%= r.custom_stat_header.present? ? r.custom_stat_header[0.5] : base_config.stat_header[0..5] %></td>
+    <td><%= base_config.search_params[0..5]  %></td>
+    <td><%= r.custom_search_summary_function.present? ? r.custom_search_summary_function[0..5] : base_config.search_summary_function[0..5] %></td>
     <td><%= link_to 'Edit', SUBURI + "/view_handler?index=1&url=#{edit_onboard_search_stat_config_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
 
   </tr>
