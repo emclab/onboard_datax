@@ -101,7 +101,7 @@ module OnboardDatax
     protected
     def load_record
       @user_access = OnboardDatax.user_access_class.find_by_id(params[:user_access_id].to_i) if params[:user_access_id].present?
-      @user_access = OnboardDatax.user_access_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id].to_i)) if params[:id].present?
+      @user_access = OnboardDatax.user_access_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id].to_i).user_access_id) if params[:id].present?
       @project = OnboardDatax.project_class.find_by_id(params[:project_id]) if params[:project_id].present?
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?

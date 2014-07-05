@@ -214,7 +214,8 @@ describe "LinkTests" do
       #no bad data
       
       visit onboard_search_stat_configs_path
-      page.should have_content('summary 230')
+      
+      page.should have_content('summary 230'[0..5])
     end
   end
 end
