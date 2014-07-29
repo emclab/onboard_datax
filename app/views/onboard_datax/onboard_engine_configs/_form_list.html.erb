@@ -5,7 +5,8 @@
 <div id="main_body">
 <h1><%=@title %></h1>
 <p></p><%=t('Project Name')%>=<%=@project.name if @project %></p>
-<%=t('# of records')%>=<%=models.count if models %>
+<p><%=t('# of records')%>=<%=models.count if models %></p>
+<p><%=t('# of engines')%>=<%=models.reorder('').uniq.pluck('onboard_datax_onboard_engine_configs.engine_id').count %></p>
 <div class="pagination"><%= will_paginate models unless @csv %></div> 
 <table class="table table-striped">
   <%=t('Download')%>: <%= link_to "CSV", onboard_engine_configs_path(format: "csv", :project_id => @project.id) if @project %>
