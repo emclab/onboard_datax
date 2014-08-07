@@ -9,9 +9,9 @@ module OnboardDatax
                     :engine_version, :last_updated_by_name, :engine_name, 
                     :as => :role_update
     
-    attr_accessor :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s
+    attr_accessor :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s, :custom_code_s
 
-    attr_accessible :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s,
+    attr_accessible :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s, :custom_code_s,
                     :as => :role_search_stats
                     
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
