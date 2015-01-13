@@ -11,6 +11,7 @@ module OnboardDatax
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.project_id = ?', @project.id) if @project
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.engine_id = ?', @engine.id) if @engine
       @erb_code = find_config_const('onboard_user_access_index_view', 'onboard_datax')
+      @engine_boarded = engine_boarded(@onboard_user_accesses)
       #for csv download
       respond_to do |format|
         format.html {@onboard_user_accesses = @onboard_user_accesses.page(params[:page]).per_page(@max_pagination)}
@@ -107,5 +108,6 @@ module OnboardDatax
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).engine_id) if params[:id].present?
     end
+    
   end
 end

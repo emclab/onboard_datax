@@ -11,6 +11,7 @@ module OnboardDatax
       @onboard_engine_configs = @onboard_engine_configs.where('onboard_datax_onboard_engine_configs.project_id = ?', @project.id) if @project
       @onboard_engine_configs = @onboard_engine_configs.where('onboard_datax_onboard_engine_configs.engine_id = ?', @engine.id) if @engine
       @erb_code = find_config_const('onboard_engine_config_index_view', 'onboard_datax')
+      @engine_boarded = engine_boarded(@onboard_engine_configs)
       #for csv download
       respond_to do |format|
         format.html {@onboard_engine_configs = @onboard_engine_configs.page(params[:page]).per_page(@max_pagination) }
@@ -106,5 +107,6 @@ module OnboardDatax
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id]).engine_id) if params[:id].present?
     end
+    
   end
 end
