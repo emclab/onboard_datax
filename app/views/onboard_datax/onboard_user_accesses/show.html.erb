@@ -55,7 +55,7 @@
 	    <th>
           <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  		  <%= link_to t('Delete'), onboard_user_access_path(@onboard_user_access), :method => :delete, :confirm => I18n.t('Delete the record?'), :confirm => I18n.t('Delete the record?'), :class => BUTTONS_CLS['action'] if has_action_right?('destroy', params[:controller], @onboard_user_access) %>
+  		  <%= link_to t('Delete'), onboard_user_access_path(@onboard_user_access), :method => :delete, :confirm => I18n.t('Delete the record?'), :class => BUTTONS_CLS['action'] if has_action_right?('destroy', params[:controller], @onboard_user_access) %>
    		</th>
 	  </tr>
 	</table> 

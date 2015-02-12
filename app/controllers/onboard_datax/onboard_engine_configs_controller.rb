@@ -32,6 +32,7 @@ module OnboardDatax
     def create
       @onboard_engine_config = OnboardDatax::OnboardEngineConfig.new(params[:onboard_engine_config], :as => :role_new)
       @onboard_engine_config.last_updated_by_id = session[:user_id]
+      @onboard_engine_config.custom_argument_value = @onboard_engine_config.custom_argument_value.strip if @onboard_engine_config.custom_argument_value.present?
       if @onboard_engine_config.save
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       else
@@ -53,6 +54,7 @@ module OnboardDatax
     def update
         @onboard_engine_config = OnboardDatax::OnboardEngineConfig.find_by_id(params[:id])
         @onboard_engine_config.last_updated_by_id = session[:user_id]
+        params[:onboard_engine_config][:custom_argument_value] = params[:onboard_engine_config][:custom_argument_value].strip if params[:onboard_engine_config][:custom_argument_value].present? 
         if @onboard_engine_config.update_attributes(params[:onboard_engine_config], :as => :role_update)
           redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
         else
