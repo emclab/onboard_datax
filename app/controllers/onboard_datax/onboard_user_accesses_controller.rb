@@ -78,25 +78,36 @@ module OnboardDatax
     
     def copy
       @title = t('Copy from Another Project')
-      @from_projects = OnboardDatax.project_class.where('id != ?', @project.id).order('id DESC')
+      @from_projects = OnboardDatax.project_class.order('id DESC')
+      @from_project_array = project_option_array(@from_projects)
+      engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
+      @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
+      @to_role_array = role_option_array(OnboardDatax.project_misc_definition_class.where('project_id = ?', @project.id))
       @erb_code = find_config_const('onboard_user_access_copy_view', 'onboard_datax')
+      @js_erb_code = find_config_const('onboard_user_access_copy_view_field', 'onboard_datax')
     end
     
     def copy_results
-      project_id = params[:save].keys[0]
-      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id']).each do |base|
-        onboard_item = OnboardDatax::OnboardUserAccess.new
-        onboard_item.user_access_id = base.user_access_id
-        onboard_item.engine_id = base.engine_id
-        onboard_item.project_id = project_id
-        onboard_item.last_updated_by_id = session[:user_id]
-        begin
-          onboard_item.save
-        rescue => e
-          flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
+      to_project_id = params[:save].keys[0].to_i #to
+      from_project_id = params[:pid_from].to_i if params[:pid_from].present?
+      role_from_id = params[:rid_from].to_i if params[:rid_from].present?
+      role_to_id = params[:rid_to].to_i if params[:rid_to].present?
+      params['ids'].each do |eid|
+        OnboardDatax::OnboardUserAccess.where('onboard_datax_onboard_user_accesses.project_id = ? AND role_definition_id = ? AND onboard_datax_onboard_user_accesses.engine_id = ?', from_project_id, role_from_id, eid).each do |base|
+          onboard_item = OnboardDatax::OnboardUserAccess.new
+          onboard_item.user_access_id = base.user_access_id
+          onboard_item.engine_id = eid
+          onboard_item.project_id = to_project_id
+          onboard_item.role_definition_id = role_to_id
+          onboard_item.last_updated_by_id = session[:user_id]
+          begin
+            onboard_item.save
+          rescue => e
+            flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
+          end
         end
-      end unless params['single_id'].blank?
-      redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: project_id)}"
+      end if params['ids'].present? && to_project_id && from_project_id && role_from_id && role_to_id
+      redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: to_project_id)}"
     end
     
     protected
@@ -107,6 +118,22 @@ module OnboardDatax
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).engine_id) if params[:id].present?
+    end
+    
+    def project_option_array(obj)
+      p_array = [[]]
+      obj.each do |p|
+        p_array << [p.name, p.id]
+      end
+      return p_array
+    end
+    
+    def role_option_array(obj)
+      r_array = [[]]
+      obj.each do |r|
+        r_array << [r.name, r.id]
+      end
+      return r_array
     end
     
   end

@@ -3,29 +3,35 @@
 <% else %>
 
 <div id="main_body">
-<p><%=t('Project')%>=<%=@project.name if @project %></p>
+<p><%=t('Project')%>=<%=@project.name %></p>
 <%= form_tag copy_results_onboard_user_accesses_path, :method => :get do %>
+  <%= label_tag(:pid_from, "Copy from Project") %>
+  <%= select_tag(:pid_from, options_for_select(@from_project_array)) %>
+  <%= label_tag(:rid_from, "Copy from Role") %>
+  <%= select_tag(:rid_from) %>
+  <%= label_tag(:rid_to, "Copy to Role") %>
+  <%= select_tag(:rid_to, options_for_select(@to_role_array)) %>
+  
 <table class="table table-striped">
   <tr>
   	 <th></th>
-     <th><%= t('Project Name') %></th>
-     <th><%= t('Create At') %></th>
-     <th><%= t('Project Desp') %></th>
+     <th><%= t('Engine Name') %></th>
+     <th><%= t('Engine Desp') %></th>
   </tr>
 
-<% @from_projects.each do |r| %>
+<% @engines.each do |r| %>
   <tr>
-    <td><%= radio_button_tag 'single_id', r.id %></td>
+    <td><%= check_box_tag 'ids[]', [r.id] %></td>
     <td><%= r.name %></td>
-    <td><%= r.created_at.strftime('%Y/%m/%d') %></td>
-    <td><%= r.project_desp[0..60] if r.project_desp %></td>
+    <td><%= r.module_desp %></td>
   </tr>
 <% end %>
    <table class="table table-striped">
 	  <tr>
 	    <th>
   		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  		  <%= submit_tag t('Save') ,:name => "save[#{@project.id}]", :class => BUTTONS_CLS['action'] %>
+  		  &nbsp;&nbsp;&nbsp;&nbsp;
+  		  <%= submit_tag t('Save') ,:name => "save[ #{@project.id}]", :class => BUTTONS_CLS['action'] %>
   	    </th>
 	  </tr>
 	</table> 

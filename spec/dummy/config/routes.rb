@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   mount Kustomerx::Engine => '/customer'
   mount InfoServiceProjectx::Engine => '/project'
   mount ProjectMiscDefinitionx::Engine => '/definition'
+  mount ResourceAllocx::Engine => '/res_alloc'
   
   resource :session
   

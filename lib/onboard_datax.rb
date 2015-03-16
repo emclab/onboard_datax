@@ -2,7 +2,7 @@ require "onboard_datax/engine"
 
 module OnboardDatax
   mattr_accessor :project_class, :engine_config_class, :user_access_class, :engine_init_class, :search_stat_config_class, :class_class, :engine_class, :customer_class,
-                 :project_misc_definition_class
+                 :project_misc_definition_class, :engine_ids_belong_to_a_project
   
   def self.project_class
     @@project_class.constantize

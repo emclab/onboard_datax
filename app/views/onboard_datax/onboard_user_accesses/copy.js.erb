@@ -1,0 +1,16 @@
+<% if @view_in_config && @js_erb_code %>
+  <%= render inline: ERB.new(@js_erb_code).result(binding) %>
+  
+<% else %>
+
+<% if params[:pid_from].present? && params[:pid_from].to_i > 0 %>
+  $('#rid_from').empty();
+  $('#rid_from').append('<option value=""></option>');
+  <% OnboardDatax.project_misc_definition_class.where(project_id: params[:pid_from].to_i).each do |r| %>
+    $('#rid_from').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
+  <% end %>
+<% else %>
+  $('#rid_from').empty();  
+<% end %>
+
+<% end %>

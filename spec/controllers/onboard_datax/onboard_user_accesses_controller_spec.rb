@@ -146,7 +146,18 @@ module OnboardDatax
         response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Deleted!")
       end
     end
-  
+    
+    describe "GET 'copy'" do
+      it "returns http success" do
+        user_access = FactoryGirl.create(:user_access, :action => 'copy', :resource =>'onboard_datax_onboard_user_accesses', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "")
+        session[:user_id] = @u.id
+        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
+        get 'copy', {:use_route => :onboard_datax, :project_id => @proj.id}
+        response.should be_success
+      end
+    end
+    
   
   end
 end

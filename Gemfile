@@ -19,6 +19,7 @@ gem 'onboard_data_uploadx', :path => '../onboard_data_uploadx'
 gem 'info_service_projectx', :path => '../info_service_projectx'
 gem 'kustomerx', :path => '../kustomerx'
 gem 'project_misc_definitionx', :path => '../project_misc_definitionx'
+gem 'resource_allocx', :path => '../resource_allocx'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
