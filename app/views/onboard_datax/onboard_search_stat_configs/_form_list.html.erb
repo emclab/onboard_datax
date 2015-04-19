@@ -1,5 +1,5 @@
 <% if @view_in_config && @erb_code %>
-<%= render inline: ERB.new(@erb_code).result(binding) %>
+  <%= render inline: @erb_code, locals: {models: models} %>
 <% else %>
 
 <div id="main_body">
@@ -8,10 +8,17 @@
 <%=t('# of records')%>=<%=models.count if models %>
 <div class="pagination"><%= will_paginate models unless @csv %></div>
 <table class="table table-striped">
-	<%=t('Download')%>: <%= link_to "CSV", onboard_search_stat_configs_path(format: "csv", :project_id => @project.id) if @project %>
+	<%= form_tag onboard_search_stat_configs_path(format: "csv", :project_id => @project.id), method: :get do %>
+	   <% releases = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'release', @project.id).order('id DESC')%>
+       <%= label_tag(:from_release, "Release") %>
+       <%= select_tag(:from_release, options_for_select(releases.select('id, name').map{|r| [r.name, r.id]})) %>
+  
+	  <%= submit_tag 'CSV' %>
+    <% end if @project %>
   <tr>
     <th>#</th>
     <th><%=t('Resource Name')%></th>
+    <th><%=t('Release')%></th>
     <th><%=t('Stat Function')%></th>    
     <th><%=t('Stat Summary Function')%></th>
     <th><%=t('Labels & Fields')%></th>
@@ -35,7 +42,8 @@
   	<% base_config = OnboardDatax.search_stat_config_class.find_by_id(OnboardDatax::OnboardSearchStatConfig.find_by_id(r.id).search_stat_config_id) %>
   	<% engine=OnboardDatax.engine_class.find_by_id(r.engine_id) %>
   	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_search_stat_config_path(r)}"  %></td> 
-  	<td><%= base_config.resource_name %></td>
+  	<td><%= r.release.name if r.release_id.present? %></td>	
+    <td><%= base_config.resource_name %></td>
   	<td><%= base_config.stat_function %></td>	
     <td><%= r.custom_stat_summary_function.present? ? r.custom_stat_summary_function[0..5] : base_config.stat_summary_function[0..5] %></td>
     <td><%= base_config.labels_and_fields %></td>	

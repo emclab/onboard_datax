@@ -15,6 +15,10 @@
   <%= @project.name %>
 </p>
 <p>
+  <b><%=t('Release')%></b>
+  <%= @onboard_search_stat_config.release.name if @onboard_search_stat_config.release_id.present? %>
+</p>
+<p>
   <b><%=t('Engine Name')%></b>
   <%= @engine.name %>
 </p>

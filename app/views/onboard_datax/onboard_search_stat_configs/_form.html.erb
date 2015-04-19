@@ -5,6 +5,7 @@
 <%= simple_form_for @onboard_search_stat_config do |f| %>    
  
   <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} %>
+  <%= f.input :release_id, :collection => OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id) %>
   <%= f.input :engine_name, :label => t('Engine Name'), :input_html => {:value => @engine.name} if @engine.present? %> 
   <%= f.input :config_desp, :label => t('Config Desp'), :readonly => true, :input_html => {:value => @search_stat_config.config_desp} %> 
   <%= f.input :resource_name, :label => t('Resource Name'), :readonly => true, :input_html => {:value => @search_stat_config.resource_name} %>

@@ -1,5 +1,5 @@
 <% if @view_in_config && @erb_code %>
-<%= render inline: ERB.new(@erb_code).result(binding) %>
+<%= render inline: @erb_code, locals: {models: models} %>
 <% else %>
 
 <div id="main_body">
@@ -9,11 +9,18 @@
 <p><%=t('# of engines')%>=<%=models.reorder('').uniq.pluck('onboard_datax_onboard_user_accesses.engine_id').count %></p>
 <div class="pagination"><%= will_paginate models unless @csv %></div>
 <table class="table table-striped">
-	<%=t('Download')%>: <%= link_to "CSV", onboard_user_accesses_path(format: "csv", :project_id => @project.id) if @project %>
+	<%= form_tag onboard_user_accesses_path(format: 'csv', :project_id => @project.id), method: :get do %>
+	   <% releases = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'release', @project.id).order('id DESC')%>
+       <%= label_tag(:from_release, 'Release') %>
+       <%= select_tag(:from_release, options_for_select(releases.select('id, name').map{|r| [r.name, r.id]})) %>
+  
+	  <%= submit_tag 'CSV' %>
+    <% end if @project %>
   <tr>
     <th>#</th>
     <th><%=t('Action')%></th>
-    <th><%=t('Resource')%></th>    
+    <th><%=t('Resource')%></th>
+    <th><%=t('Release')%></th>    
     <th><%=t('Brief Note')%></th>
     <th><%=t('Last Updated By')%></th>
     <th><%=t('Role Definition')%></th>
@@ -32,7 +39,8 @@
   	<% engine=OnboardDatax.engine_class.find_by_id(r.engine_id) %>
   	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_user_access_path(r)}"  %></td> 
   	<td><%= base_config.action %></td>
-  	<td><%= base_config.resource %></td>	
+  	<td><%= base_config.resource %></td>
+  	<td><%= r.release.name if r.release_id.present? %></td>	
     <td><%= base_config.brief_note %></td>   
     <td><%= r.last_updated_by.name %></td> 
     <td><%= r.role_definition.name %></td>
@@ -41,7 +49,7 @@
     <td><%= base_config.rank %></td>
     <td><%= r.created_at %></td>
   	<td><%= r.updated_at %></td>
-  	<td><%= link_to 'Edit', SUBURI + "/view_handler?index=1&url=#{edit_onboard_user_access_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
+  	<td><%= link_to t('Edit'), SUBURI + "/view_handler?index=1&url=#{edit_onboard_user_access_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
 
   </tr>
 <% end %>

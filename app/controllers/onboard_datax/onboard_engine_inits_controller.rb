@@ -10,6 +10,7 @@ module OnboardDatax
       @onboard_engine_inits =  params[:onboard_datax_onboard_engine_inits][:model_ar_r]
       @onboard_engine_inits = @onboard_engine_inits.where('onboard_datax_onboard_engine_inits.project_id = ?', @project.id) if @project
       @onboard_engine_inits = @onboard_engine_inits.where('onboard_datax_onboard_engine_inits.engine_id = ?', @engine.id) if @engine
+      @onboard_engine_inits = @onboard_engine_inits.where('onboard_datax_onboard_engine_inits.release_id = ?', @release.id) if @release
       @onboard_engine_inits = @onboard_engine_inits.page(params[:page]).per_page(@max_pagination)
       @erb_code = find_config_const('onboard_engine_init_index_view', 'onboard_datax')
     end
@@ -74,6 +75,8 @@ module OnboardDatax
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardEngineInit.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardEngineInit.find_by_id(params[:id]).engine_id) if params[:id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(params[:release_id]) if params[:release_id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(OnboardDatax::OnboardEngineInit.find_by_id(params[:id]).release_id) if params[:id].present?      
     end
   end
 end

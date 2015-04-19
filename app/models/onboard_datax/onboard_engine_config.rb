@@ -1,27 +1,29 @@
 module OnboardDatax
   class OnboardEngineConfig < ActiveRecord::Base
     self.primary_key = :id
-    attr_accessor :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, :global, :engine_version, :last_updated_by_name, :engine_name
+    attr_accessor :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, :global, :engine_version, :last_updated_by_name, :engine_name, 
+                  :release_name
     attr_accessible :engine_config_id, :project_id, :custom_argument_value, :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, 
-                    :global, :engine_version, :engine_id, :engine_name,
+                    :global, :engine_version, :engine_id, :engine_name, :release_id,
                     :as => :role_new
     attr_accessible :custom_argument_value, :project_name, :argument_name, :argument_desp, :brief_note, :argument_value, :global, 
-                    :engine_version, :last_updated_by_name, :engine_name, 
+                    :engine_version, :last_updated_by_name, :engine_name, :release_id,
                     :as => :role_update
     
     attr_accessor :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s, :custom_code_s,
-                  :argument_value_s
+                  :argument_value_s, :release_id_s
 
     attr_accessible :start_date_s, :end_date_s, :argument_name_s, :engine_id_s, :argument_desp_s, :commissioned_by_id_s, :project_id_s, :custom_code_s,
-                    :argument_value_s,
+                    :argument_value_s, :release_id_s,
                     :as => :role_search_stats
                     
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
     belongs_to :engine_config, :class_name => OnboardDatax.engine_config_class.to_s  
     belongs_to :project, :class_name => OnboardDatax.project_class.to_s
     belongs_to :engine, :class_name => OnboardDatax.engine_class.to_s
+    belongs_to :release, :class_name => OnboardDatax.project_misc_definition_class.to_s
     
-    validates :project_id, :engine_config_id, :engine_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
+    validates :project_id, :engine_config_id, :engine_id, :release_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
     validates :engine_config_id, :uniqueness => {:scope => :project_id, :case_sensitive => false, :message => I18n.t('Duplicate Config')}
     
     #cnovert to csv

@@ -6,5 +6,6 @@ FactoryGirl.define do
     #last_updated_by_id 1
     engine_config_id 1
     engine_id 1
+    release_id 2
   end
 end

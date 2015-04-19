@@ -1,16 +1,19 @@
 module OnboardDatax
   class OnboardUserAccess < ActiveRecord::Base
-    attr_accessor :project_name, :role_definition_name, :access_desp, :action, :brief_note, :masked_attrs, :rank, :resource, :sql_code, :engine_name, :last_updated_by_name
+    attr_accessor :project_name, :role_definition_name, :access_desp, :action, :brief_note, :masked_attrs, :rank, :resource, :sql_code, :engine_name, 
+                  :last_updated_by_name, :release_name
     attr_accessible :project_id, :role_definition_id, :user_access_id, :project_name, :role_definition_name, :access_desp, :action, :brief_note, :masked_attrs, :rank, 
-                    :resource, :sql_code, :engine_name, :engine_id, 
+                    :resource, :sql_code, :engine_name, :engine_id, :release_id, 
                     :as => :role_new
     attr_accessible :role_definition_id, :project_name, :role_definition_name, :access_desp, :action, :brief_note, :masked_attrs, :rank, :resource, :sql_code, 
-                    :engine_name, :last_updated_by_name, :project_name,
+                    :engine_name, :last_updated_by_name, :project_name, :release_id,
                     :as => :role_update
                     
-    attr_accessor :start_date_s, :end_date_s, :action_s, :resource_s, :access_desp_s, :engine_id_s, :project_id_s, :role_definition_name_s, :sql_code_s
+    attr_accessor :start_date_s, :end_date_s, :action_s, :resource_s, :access_desp_s, :engine_id_s, :project_id_s, :role_definition_name_s, :sql_code_s,
+                  :release_id_s
 
     attr_accessible :start_date_s, :end_date_s, :action_s, :resource_s, :access_desp_s, :engine_id_s, :project_id_s, :role_definition_name_s, :sql_code_s,
+                    :release_id_s,
                     :as => :role_search_stats 
     
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
@@ -18,8 +21,10 @@ module OnboardDatax
     belongs_to :project, :class_name => OnboardDatax.project_class.to_s
     belongs_to :engine, :class_name => OnboardDatax.engine_class.to_s
     belongs_to :role_definition, :class_name => OnboardDatax.project_misc_definition_class.to_s
+    belongs_to :release, :class_name => OnboardDatax.project_misc_definition_class.to_s
     
-    validates :project_id, :user_access_id, :engine_id, :role_definition_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
+    validates :project_id, :user_access_id, :engine_id, :role_definition_id, :release_id, :presence => true, 
+              :numericality => {:only_integer => true, :greater_than => 0}
     validates :user_access_id, :uniqueness => {:scope => [:project_id, :role_definition_id], :case_sensitive => false, :message => I18n.t('Duplicate Access')}
     
     #cnovert to csv

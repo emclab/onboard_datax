@@ -11,3 +11,11 @@ $(function (){
   	  return false;
 	});
 });
+
+// for search
+$(function (){
+	$('#onboard_user_access_project_id_s').change(function(){
+      $.get(window.location, $('form').serialize(), null, "script");
+  	  return false;
+	});
+});

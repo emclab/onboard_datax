@@ -5,6 +5,7 @@
 <%= simple_form_for @onboard_user_access do |f| %>    
  
   <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} if @project %>
+  <%= f.input :release_id, :collection => OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id) %>
   <%= f.input :project_id, :as => :hidden, :input_html => {:value => @project.id} if @project %>
   <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine.present? %> 
   <%= f.input :engine_id, :as => :hidden, :input_html => {:value => @engine.id} if @engine %>

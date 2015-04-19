@@ -14,7 +14,8 @@
     <th><%=t('Engine Version')%></th>
     <th><%=t('Init Desp')%></th>
     <th><%=t('File Name')%></th>
-    <th><%=t('Init Code')%></th>    
+    <th><%=t('Init Code')%></th>
+    <th><%=t('Release')%></th>    
     <th><%=t('Created At')%></th>
     <th><%=t('Last Updated By')%></th> 
     <th></th>
@@ -31,6 +32,7 @@
   	<td><%= base_config.init_desp %></td>	
     <td><%= base_config.file_name %></td>   
     <td><%= base_config.init_code %></td>   
+    <td><%= r.release.name if r.release_id.present? %></td>	
     <td><%= r.created_at.strftime('%Y/%m/%d') %></td>
   	<td><%= r.last_updated_by.name %></td> 
     <td><%= link_to 'Edit', SUBURI + "/view_handler?index=1&url=#{edit_onboard_engine_init_path(r)}", :class => BUTTONS_CLS['action'] if has_action_right?('update', params[:controller], r) %></td>
@@ -41,7 +43,8 @@
 	  <tr>
 	    <th>
   		  <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  		 &nbsp;<%= link_to t('New Onboard Engine Init'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_engine_init_path(:engine_init_id => @engine_init.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @engine_init && @project && @engine && has_action_right?('create', params[:controller]) %>
+  		 &nbsp;
+  		 <%= link_to t('New Onboard Engine Init'), SUBURI + "/view_handler?index=1&url=#{CGI.escape new_onboard_engine_init_path(:engine_init_id => @engine_init.id, :project_id => @project.id, :engine_id => @engine.id)}", :class => BUTTONS_CLS['action'] if @engine_init && @project && @engine && has_action_right?('create', params[:controller]) %>
         </th>
 	  </tr>
 	</table> 

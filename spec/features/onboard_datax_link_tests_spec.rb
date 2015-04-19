@@ -93,6 +93,7 @@ describe "LinkTests" do
       @init = FactoryGirl.create(:onboard_data_uploadx_engine_init, :engine_id => @engine.id)
       @init1 = FactoryGirl.create(:onboard_data_uploadx_engine_init, :engine_id => @engine1.id)
       
+      @release = FactoryGirl.create(:project_misc_definitionx_misc_definition, project_id: @proj.id, definition_category: 'release', name: 'rel name' )
       visit '/'
       #save_and_open_page
       fill_in "login", :with => @u.login
@@ -101,9 +102,9 @@ describe "LinkTests" do
     end
     it "works for engine config" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      visit onboard_engine_configs_path
+      #visit onboard_engine_configs_path
       #save_and_open_page
-      task = FactoryGirl.create(:onboard_datax_onboard_engine_config, :project_id => @proj.id, :engine_config_id => @engine_config.id, :last_updated_by_id => @u.id)
+      task = FactoryGirl.create(:onboard_datax_onboard_engine_config, :project_id => @proj.id, :engine_config_id => @engine_config.id, :last_updated_by_id => @u.id, release_id: @release.id)
       visit onboard_engine_configs_path
       #save_and_open_page
       page.should have_content('Onboard Engine Configs')
@@ -123,22 +124,28 @@ describe "LinkTests" do
       page.should have_content('Onboard Engine Config Info')
       
       #new
-      visit onboard_engine_configs_path(:engine_config_id => @engine_config1.id, :engine_id => @engine.id, :project_id => @proj.id)
+      visit onboard_engine_configs_path(:engine_config_id => @engine_config1.id, :engine_id => @engine.id, :project_id => @proj.id, release_id: @release.id)
       click_link 'New Onboard Engine Config'
-      save_and_open_page
+      #save_and_open_page
       page.should have_content('New Onboard Engine Config')
       fill_in 'onboard_engine_config_custom_argument_value', :with =>  'argument value 230'
+      select('rel name', from: 'onboard_engine_config_release_id')
       click_button 'Save'
       #save_and_open_page
       #no bad data
       visit onboard_engine_configs_path()
       save_and_open_page
       page.should have_content('argument value 230'[0..5])
+      
+      #download, ex csv
+      visit onboard_engine_configs_path(project_id:  @proj.id)
+      click_button 'CSV'
+      page.should have_content("id,engine_name,engine_version,argument_name,argument_value,last_updated_by_id,created_at,updated_at,")
     end
     
     it "works for user access" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      task = FactoryGirl.create(:onboard_datax_onboard_user_access, :project_id => @proj.id, :user_access_id => @user_access.id, :role_definition_id => @role.id, :last_updated_by_id => @u.id)
+      task = FactoryGirl.create(:onboard_datax_onboard_user_access, :project_id => @proj.id, :user_access_id => @user_access.id, :role_definition_id => @role.id, release_id: @release.id, :last_updated_by_id => @u.id)
       visit onboard_user_accesses_path
       #save_and_open_page
       page.should have_content('Onboard User Accesses')
@@ -159,10 +166,15 @@ describe "LinkTests" do
       #save_and_open_page
       page.should have_content('New Onboard User Access')
       #no fill in at all for new
+      
+      #download, ex CSV
+      visit onboard_user_accesses_path(project_id: @proj.id)
+      click_button 'CSV'
+      page.should have_content("id,action,resource,brief_note,last_updated_by_id,role_definition_id,sql_code,masked_attrs")
     end
     
     it "works for engine init" do
-      task = FactoryGirl.create(:onboard_datax_onboard_engine_init, :project_id => @proj.id, :engine_init_id => @init.id, :last_updated_by_id => @u.id)
+      task = FactoryGirl.create(:onboard_datax_onboard_engine_init, :project_id => @proj.id, :engine_init_id => @init.id, :last_updated_by_id => @u.id, release_id: @release.id)
       visit onboard_engine_inits_path
       #save_and_open_page
       page.should have_content('Onboard Engine Inits')
@@ -181,10 +193,11 @@ describe "LinkTests" do
       #save_and_open_page
       page.should have_content('New Onboard Engine Init')
       #no fill in at all
+      
     end
     
     it "works for search stat config" do
-      task = FactoryGirl.create(:onboard_datax_onboard_search_stat_config, :project_id => @proj.id, :search_stat_config_id => @search_stat.id, :last_updated_by_id => @u.id)
+      task = FactoryGirl.create(:onboard_datax_onboard_search_stat_config, :project_id => @proj.id, :search_stat_config_id => @search_stat.id, :last_updated_by_id => @u.id, release_id: @release.id)
       visit onboard_search_stat_configs_path(:project_id => @proj.id)
       #save_and_open_page
       page.should have_content('Onboard Search/Stat Configs')
@@ -209,13 +222,19 @@ describe "LinkTests" do
       page.should have_content('New Onboard Search/Stat Config')
       fill_in 'onboard_search_stat_config_custom_stat_summary_function', :with => 'summary 230'
       fill_in 'onboard_search_stat_config_custom_stat_header', :with => 'this is a new header'
+      select('rel name', :from => 'onboard_search_stat_config_release_id')
       click_button 'Save'
-      save_and_open_page
+      #save_and_open_page
       #no bad data
       
       visit onboard_search_stat_configs_path
       
       page.should have_content('summary 230'[0..5])
+      
+      #download, ex CSV
+      visit onboard_search_stat_configs_path(project_id: @proj.id)
+      click_button 'CSV'
+      page.should have_content("id,resource_name,stat_function,stat_summary_function,labels_and_fields")
     end
   end
 end

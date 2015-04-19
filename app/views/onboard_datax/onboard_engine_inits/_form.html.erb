@@ -6,6 +6,7 @@
  
   <%= f.input :project_name, :label => t('Project'), :readonly => true, :input_html => {:value => @project.name} %>
   <%= f.input :engine_name, :label => t('Engine Name'), :readonly => true, :input_html => {:value => @engine.name} if @engine.present? %> 
+  <%= f.input :release_id, :collection => OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id) %>
   <%= f.input :init_desp, :label => t('Init Desp'), :readonly => true, :input_html => {:rows => 3}, as: :text %> 
   <%= f.input :file_name, :label => t('File Name'),  :readonly => true %>
   <%= f.input :init_code, :label => t('Init Code'), :readonly => true, :input_html => {:rows => 10}, as: :text %>   

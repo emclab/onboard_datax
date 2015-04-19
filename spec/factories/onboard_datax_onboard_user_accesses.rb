@@ -7,5 +7,6 @@ FactoryGirl.define do
     role_definition_id 1
     user_access_id 1
     engine_id 1
+    release_id 2
   end
 end

@@ -10,6 +10,7 @@ module OnboardDatax
       @onboard_engine_configs =  params[:onboard_datax_onboard_engine_configs][:model_ar_r]
       @onboard_engine_configs = @onboard_engine_configs.where('onboard_datax_onboard_engine_configs.project_id = ?', @project.id) if @project
       @onboard_engine_configs = @onboard_engine_configs.where('onboard_datax_onboard_engine_configs.engine_id = ?', @engine.id) if @engine
+      @onboard_engine_configs = @onboard_engine_configs.where('onboard_datax_onboard_engine_configs.release_id = ?', @release.id) if @release
       @erb_code = find_config_const('onboard_engine_config_index_view', 'onboard_datax')
       @engine_boarded = engine_boarded(@onboard_engine_configs)
       #for csv download
@@ -18,7 +19,7 @@ module OnboardDatax
         format.csv do
           send_data @onboard_engine_configs.to_csv
           @csv = true
-        end
+        end #if @release
       end
     end
 
@@ -108,6 +109,9 @@ module OnboardDatax
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id]).engine_id) if params[:id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(params[:release_id]) if params[:release_id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(params[:from_release].to_i) if params[:from_release].present?  #csv download
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(OnboardDatax::OnboardEngineConfig.find_by_id(params[:id]).release_id) if params[:id].present?
     end
     
   end

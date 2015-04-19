@@ -6,11 +6,17 @@
 <% if params[:pid_from].present? && params[:pid_from].to_i > 0 %>
   $('#rid_from').empty();
   $('#rid_from').append('<option value=""></option>');
-  <% OnboardDatax.project_misc_definition_class.where(project_id: params[:pid_from].to_i).each do |r| %>
+  <% OnboardDatax.project_misc_definition_class.where(project_id: params[:pid_from].to_i).where(definition_category: 'role_definition').each do |r| %>
     $('#rid_from').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
+  <% end %>
+  $('#release_from').empty();
+  $('#release_from').append('<option value=""></option>');
+  <% OnboardDatax.project_misc_definition_class.where(project_id: params[:pid_from].to_i).where(definition_category: 'release').each do |r| %>
+    $('#release_from').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
   <% end %>
 <% else %>
   $('#rid_from').empty();  
+  $('#release_from').empty();
 <% end %>
 
 <% end %>

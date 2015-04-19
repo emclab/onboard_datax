@@ -10,6 +10,7 @@ module OnboardDatax
       @onboard_user_accesses =  params[:onboard_datax_onboard_user_accesses][:model_ar_r]
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.project_id = ?', @project.id) if @project
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.engine_id = ?', @engine.id) if @engine
+      @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.release_id = ?', @release.id) if @release
       @erb_code = find_config_const('onboard_user_access_index_view', 'onboard_datax')
       @engine_boarded = engine_boarded(@onboard_user_accesses)
       #for csv download
@@ -18,7 +19,7 @@ module OnboardDatax
         format.csv do
           send_data @onboard_user_accesses.to_csv
           @csv = true
-        end
+        end #if @release
       end
     end
 
@@ -79,10 +80,11 @@ module OnboardDatax
     def copy
       @title = t('Copy from Another Project')
       @from_projects = OnboardDatax.project_class.order('id DESC')
-      @from_project_array = project_option_array(@from_projects)
+      @from_project_array = @from_projects.select('id, name').map{|r| [r.name, r.id]}
       engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
       @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
-      @to_role_array = role_option_array(OnboardDatax.project_misc_definition_class.where('project_id = ?', @project.id))
+      @to_role_array = OnboardDatax.project_misc_definition_class.where('project_id = ?', @project.id).select('id, name').map{|r| [r.name, r.id]}
+      @to_release = OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id).select('id, name').map{|r| [r.name, r.id]}
       @erb_code = find_config_const('onboard_user_access_copy_view', 'onboard_datax')
       @js_erb_code = find_config_const('onboard_user_access_copy_view_field', 'onboard_datax')
     end
@@ -91,22 +93,26 @@ module OnboardDatax
       to_project_id = params[:save].keys[0].to_i #to
       from_project_id = params[:pid_from].to_i if params[:pid_from].present?
       role_from_id = params[:rid_from].to_i if params[:rid_from].present?
+      release_from = params[:release_from].to_i if params[:release_from]
+      release_to = params[:release_to].to_i if params[:release_to]
       role_to_id = params[:rid_to].to_i if params[:rid_to].present?
       params['ids'].each do |eid|
-        OnboardDatax::OnboardUserAccess.where('onboard_datax_onboard_user_accesses.project_id = ? AND role_definition_id = ? AND onboard_datax_onboard_user_accesses.engine_id = ?', from_project_id, role_from_id, eid).each do |base|
+        OnboardDatax::OnboardUserAccess.where('onboard_datax_onboard_user_accesses.project_id = ? AND role_definition_id = ? AND onboard_datax_onboard_user_accesses.engine_id = ? AND release_id = ?', 
+                                              from_project_id, role_from_id, eid, release_from).each do |base|
           onboard_item = OnboardDatax::OnboardUserAccess.new
           onboard_item.user_access_id = base.user_access_id
           onboard_item.engine_id = eid
           onboard_item.project_id = to_project_id
           onboard_item.role_definition_id = role_to_id
           onboard_item.last_updated_by_id = session[:user_id]
+          onboard_item.release_id = release_to
           begin
             onboard_item.save
           rescue => e
             flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
           end
         end
-      end if params['ids'].present? && to_project_id && from_project_id && role_from_id && role_to_id
+      end if params['ids'].present? && to_project_id && from_project_id && role_from_id && role_to_id  && release_from && release_to
       redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: to_project_id)}"
     end
     
@@ -118,8 +124,11 @@ module OnboardDatax
       @project = OnboardDatax.project_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).project_id) if params[:id].present?      
       @engine = OnboardDatax.engine_class.find_by_id(params[:engine_id].to_i) if params[:engine_id].present?
       @engine = OnboardDatax.engine_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).engine_id) if params[:id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(params[:release_id].to_i) if params[:release_id].present?
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(params[:from_release].to_i) if params[:from_release].present?  #csv download
+      @release = OnboardDatax.project_misc_definition_class.find_by_id(OnboardDatax::OnboardUserAccess.find_by_id(params[:id]).release_id) if params[:id].present?
     end
-    
+=begin
     def project_option_array(obj)
       p_array = [[]]
       obj.each do |p|
@@ -135,6 +144,7 @@ module OnboardDatax
       end
       return r_array
     end
+=end
     
   end
 end

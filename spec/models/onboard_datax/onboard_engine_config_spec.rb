@@ -12,6 +12,11 @@ module OnboardDatax
       c.should_not be_valid
     end
     
+    it "should reject 0 releaset id" do
+      c = FactoryGirl.build(:onboard_datax_onboard_engine_config, :release_id => 0)
+      c.should_not be_valid
+    end
+    
     it "should reject 0 engine id" do
       c = FactoryGirl.build(:onboard_datax_onboard_engine_config, :engine_id => 0)
       c.should_not be_valid

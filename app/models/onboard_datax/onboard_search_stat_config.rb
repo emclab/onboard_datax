@@ -1,28 +1,30 @@
 module OnboardDatax
   class OnboardSearchStatConfig < ActiveRecord::Base
     attr_accessor :config_desp, :brief_note, :engine_name, :labels_and_fields, :resource_name, :search_list_form, :search_params, :search_results_period_limit, 
-                  :search_summary_function, :search_where, :stat_function, :stat_header, :stat_summary_function, :time_frame, :last_updated_by_name, :project_name
-    attr_accessible :project_id, :search_stat_config_id, :custom_stat_header, :custom_search_summary_function, :custom_stat_summary_function,
+                  :search_summary_function, :search_where, :stat_function, :stat_header, :stat_summary_function, :time_frame, :last_updated_by_name, :project_name,
+                  :release_name
+    attr_accessible :project_id, :search_stat_config_id, :custom_stat_header, :custom_search_summary_function, :custom_stat_summary_function, :release_id,
                     :engine_id, :engine_name, :project_name, :brief_note, :config_desp, :engine_id, :labels_and_fields, :resource_name, :search_list_form, 
                     :search_params, :search_results_period_limit, :search_summary_function, :search_where, :stat_function, :stat_header, :stat_summary_function, 
                     :time_frame, :project_name,
                     :as => :role_new
-    attr_accessible :last_updated_by_name, :custom_stat_header, :custom_search_summary_function, :brief_note, :config_desp, :engine_id, :labels_and_fields, 
+    attr_accessible :last_updated_by_name, :custom_stat_header, :custom_search_summary_function, :brief_note, :config_desp, :engine_id, :labels_and_fields, :release_id, 
                     :resource_name, :search_list_form, :search_params, :search_results_period_limit, :search_summary_function, :search_where, :stat_function, 
                     :stat_header, :stat_summary_function, :time_frame, :custom_stat_summary_function, :engine_name, :project_name,
                     :as => :role_update
     
-    attr_accessor :start_date_s, :end_date_s, :resource_name_s, :engine_id_s, :config_desp_s, :project_id_s, :custom_code_s 
+    attr_accessor :start_date_s, :end_date_s, :resource_name_s, :engine_id_s, :config_desp_s, :project_id_s, :custom_code_s, :release_id_s
 
-    attr_accessible :start_date_s, :end_date_s, :resource_name_s, :engine_id_s, :config_desp_s, :project_id_s, :custom_code_s,
+    attr_accessible :start_date_s, :end_date_s, :resource_name_s, :engine_id_s, :config_desp_s, :project_id_s, :custom_code_s, :release_id_s,
                     :as => :role_search_stats
     
     belongs_to :last_updated_by, :class_name => 'Authentify::User'
     belongs_to :search_stat_config, :class_name => OnboardDatax.search_stat_config_class.to_s  
     belongs_to :project, :class_name => OnboardDatax.project_class.to_s
     belongs_to :engine, :class_name => OnboardDatax.engine_class.to_s
+    belongs_to :release, :class_name => OnboardDatax.project_misc_definition_class.to_s
     
-    validates :project_id, :search_stat_config_id, :engine_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
+    validates :project_id, :search_stat_config_id, :engine_id, :release_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
     validates :search_stat_config_id, :uniqueness => {:scope => :project_id, :case_sensitive => false, :message => I18n.t('Duplicate Search/Stat Config')}
     
     #cnovert to csv

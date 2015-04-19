@@ -24,6 +24,7 @@ module OnboardDatax
       @engine_config = FactoryGirl.create(:onboard_data_uploadx_user_access, :engine_id => @sw_mod.id, :access_desp => 'new new')
       @engine_config1 = FactoryGirl.create(:onboard_data_uploadx_user_access, :engine_id => @sw_mod1.id, action: 'new act')
       @role = FactoryGirl.create(:project_misc_definitionx_misc_definition)
+      @release = FactoryGirl.create(:project_misc_definitionx_misc_definition, project_id: @proj.id, definition_category: 'release', name: 'rel name')
     end
     
     render_views
@@ -34,8 +35,8 @@ module OnboardDatax
         :sql_code => "OnboardDatax::OnboardUserAccess.scoped.order('created_at DESC')")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :user_access_id => @engine_config.id, :role_definition_id => @role.id, :last_updated_by_id => @u.id)
-        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :access_desp => 'a new one', :user_access_id =>  @engine_config1.id, :role_definition_id => @role.id, :last_updated_by_id => @u.id )
+        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :user_access_id => @engine_config.id, :role_definition_id => @role.id, :last_updated_by_id => @u.id, release_id: @release.id)
+        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :access_desp => 'a new one', :user_access_id =>  @engine_config1.id, :role_definition_id => @role.id, :last_updated_by_id => @u.id, release_id: @release.id )
         get 'index', {:use_route => :onboard_datax}
         assigns(:onboard_user_accesses).should =~ [q, q1]
       end
@@ -45,8 +46,8 @@ module OnboardDatax
         :sql_code => "OnboardDatax::OnboardUserAccess.scoped.order('created_at DESC')")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :user_access_id => @engine_config.id, :last_updated_by_id => @u.id)
-        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :engine_id => @sw_mod.id + 1, :user_access_id =>  @engine_config1.id, :last_updated_by_id => @u.id)
+        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :user_access_id => @engine_config.id, :last_updated_by_id => @u.id, release_id: @release.id)
+        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :engine_id => @sw_mod.id + 1, :user_access_id =>  @engine_config1.id, :last_updated_by_id => @u.id, release_id: @release.id)
         get 'index', {:use_route => :onboard_datax, :engine_id => @sw_mod.id}
         assigns(:onboard_user_accesses).should =~ [q]
       end
@@ -56,9 +57,20 @@ module OnboardDatax
         :sql_code => "OnboardDatax::OnboardUserAccess.scoped.order('created_at DESC')")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :role_definition_id => 1, :user_access_id => @engine_config.id, :project_id => @proj.id, :last_updated_by_id => @u.id)
-        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :engine_id => q.engine_id + 1, :user_access_id => @engine_config1.id, :project_id => q.project_id + 1, :last_updated_by_id => @u.id)
+        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :role_definition_id => 1, :user_access_id => @engine_config.id, :project_id => @proj.id, :last_updated_by_id => @u.id, release_id: @release.id)
+        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :engine_id => q.engine_id + 1, :user_access_id => @engine_config1.id, :project_id => q.project_id + 1, :last_updated_by_id => @u.id, release_id: @release.id)
         get 'index', {:use_route => :onboard_datax, :project_id => @proj.id}
+        assigns(:onboard_user_accesses).should =~ [q]
+      end
+      
+      it "should return user accesses which belong to release" do
+        user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'onboard_datax_onboard_user_accesses', :role_definition_id => @role.id, :rank => 1,
+        :sql_code => "OnboardDatax::OnboardUserAccess.scoped.order('created_at DESC')")
+        session[:user_id] = @u.id
+        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
+        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :role_definition_id => 1, :user_access_id => @engine_config.id, :release_id => @release.id, :last_updated_by_id => @u.id)
+        q1 = FactoryGirl.create(:onboard_datax_onboard_user_access, :engine_id => q.engine_id + 1, :user_access_id => @engine_config1.id, :release_id => q.release_id + 1, :last_updated_by_id => @u.id)
+        get 'index', {:use_route => :onboard_datax, :release_id => @release.id}
         assigns(:onboard_user_accesses).should =~ [q]
       end
       
@@ -129,7 +141,7 @@ module OnboardDatax
         :sql_code => "record.last_updated_by_id == session[:user_id]")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :last_updated_by_id => @u.id, :engine_id => @sw_mod.id, :project_id => @proj.id, :user_access_id => @engine_config.id)
+        q = FactoryGirl.create(:onboard_datax_onboard_user_access, :last_updated_by_id => @u.id, :engine_id => @sw_mod.id, :project_id => @proj.id, :user_access_id => @engine_config.id, release_id: @release.id)
         get 'show', {:use_route => :onboard_datax, :id => q.id }
         response.should be_success
       end
