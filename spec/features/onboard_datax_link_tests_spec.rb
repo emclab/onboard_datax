@@ -141,6 +141,10 @@ describe "LinkTests" do
       visit onboard_engine_configs_path(project_id:  @proj.id)
       click_button 'CSV'
       page.should have_content("id,engine_name,engine_version,argument_name,argument_value,last_updated_by_id,created_at,updated_at,")
+      
+      #no download without @proj
+      visit onboard_engine_configs_path
+      page.should_not have_content('CSV')
     end
     
     it "works for user access" do
@@ -171,6 +175,10 @@ describe "LinkTests" do
       visit onboard_user_accesses_path(project_id: @proj.id)
       click_button 'CSV'
       page.should have_content("id,action,resource,brief_note,last_updated_by_id,role_definition_id,sql_code,masked_attrs")
+      
+      #no download without @proj
+      visit onboard_user_accesses_path
+      page.should_not have_content("CSV")
     end
     
     it "works for engine init" do
@@ -235,6 +243,10 @@ describe "LinkTests" do
       visit onboard_search_stat_configs_path(project_id: @proj.id)
       click_button 'CSV'
       page.should have_content("id,resource_name,stat_function,stat_summary_function,labels_and_fields")
+      
+      #no download without @proj
+      visit onboard_search_stat_configs_path
+      page.should_not have_content('CSV')
     end
   end
 end
