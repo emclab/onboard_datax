@@ -83,7 +83,7 @@ module OnboardDatax
       @from_project_array = @from_projects.select('id, name').map{|r| [r.name, r.id]}
       engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
       @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
-      @to_role_array = OnboardDatax.project_misc_definition_class.where('project_id = ?', @project.id).select('id, name').map{|r| [r.name, r.id]}
+      @to_role_array = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'role_definition', @project.id).select('id, name').map{|r| [r.name, r.id]}
       @to_release = OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id).select('id, name').map{|r| [r.name, r.id]}
       @erb_code = find_config_const('onboard_user_access_copy_view', 'onboard_datax')
       @js_erb_code = find_config_const('onboard_user_access_copy_view_field', 'onboard_datax')

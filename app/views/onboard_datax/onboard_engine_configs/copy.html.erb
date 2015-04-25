@@ -9,17 +9,21 @@
   <tr>
   	 <th></th>
      <th><%= t('Project Name') %></th>
+     <th><%= t('Release') %></th>
      <th><%= t('Create At') %></th>
      <th><%= t('Project Desp') %></th>
   </tr>
 
 <% @from_projects.each do |r| %>
-  <tr>
-    <td><%= radio_button_tag 'single_id', r.id %></td>
-    <td><%= r.name %></td>
-    <td><%= r.created_at.strftime('%Y/%m/%d') %></td>
-    <td><%= r.project_desp[0..60] if r.project_desp %></td>
-  </tr>
+  <% releases = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'release', r.id).order('id DESC').each do |rel| %>     
+    <tr>
+      <td><%= radio_button_tag 'single_id', [r.id, rel.id].join(',') %></td>
+      <td><%= r.name %></td>
+      <td><%= rel.name %></td>
+      <td><%= r.created_at.strftime('%Y/%m/%d') %></td>
+      <td><%= r.project_desp[0..60] if r.project_desp %></td>
+    </tr>
+  <% end %>
 <% end %>
    <table class="table table-striped">
 	  <tr>
