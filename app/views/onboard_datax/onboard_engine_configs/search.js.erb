@@ -5,6 +5,7 @@
 
  <% if  params[:onboard_engine_config][:project_id_s].present?  %>
     $('#onboard_engine_config_release_id_s').empty();
+    $('#onboard_engine_config_release_id_s').append('<option value=""></option>');
     <% OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: params[:onboard_engine_config][:project_id_s].to_i).each do |r| %>
        $('#onboard_engine_config_release_id_s').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
     <% end %>
