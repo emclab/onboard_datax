@@ -85,13 +85,14 @@ module OnboardDatax
     
     def copy_results
       project_id = params[:save].keys[0]
-      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id']).each do |base|
+      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id'].sub(/,\d+/, '').to_i).each do |base|
         onboard_item = OnboardDatax::OnboardEngineConfig.new
         onboard_item.engine_config_id = base.engine_config_id
         onboard_item.engine_id = base.engine_id
         onboard_item.project_id = project_id
         onboard_item.custom_argument_value = base.custom_argument_value
         onboard_item.last_updated_by_id = session[:user_id]
+        onboard_item.release_id = params[:single_id].sub(/\d+,/,'').to_i
         begin
           onboard_item.save
         rescue => e
