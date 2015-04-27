@@ -116,6 +116,34 @@ module OnboardDatax
       redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: to_project_id)}"
     end
     
+    def batch_delete
+      @title = t('Copy from Another Project')
+      @roles = OnboardDataUploadx.project_misc_definition_class.where(:project_id => @project_id).where(:definition_category => 'role_definition').order('ranking_index')
+      engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
+      @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
+      @from_role_array = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'role_definition', @project.id).select('id, name').map{|r| [r.name, r.id]}
+      @from_release = OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id).select('id, name').map{|r| [r.name, r.id]}
+      @erb_code = find_config_const('onboard_user_access_batch_delete_view', 'onboard_datax')
+      @js_erb_code = find_config_const('onboard_user_access_batch_delete_view_field', 'onboard_datax')
+    end
+    
+    def batch_delete_result
+      project_id = params[:save].keys[0].to_i #to
+      role_id = params[:from_rid].to_i if params[:from_rid].present?
+      release_id = params[:from_release].to_i if params[:from_release]
+      params['ids'].each do |eid|
+      OnboardDatax::OnboardUserAccess.where('onboard_datax_onboard_user_accesses.project_id = ? AND role_definition_id = ? AND onboard_datax_onboard_user_accesses.engine_id = ? AND release_id = ?', 
+                                              project_id, role_id, eid, release_id).each do |base|
+          begin
+            OnboardDatax::OnboardUserAccess.delete(base.id)
+          rescue => e
+            flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
+          end
+        end
+      end if params['ids'].present? && to_project_id && from_project_id && role_from_id && role_to_id  && release_from && release_to
+      redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_user_accesses_path(project_id: to_project_id)}&msg=Successfully Deleted!"
+    end
+    
     protected
     def load_record
       @user_access = OnboardDatax.user_access_class.find_by_id(params[:user_access_id].to_i) if params[:user_access_id].present?

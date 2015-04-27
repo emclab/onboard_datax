@@ -8,8 +8,8 @@
   <%= label_tag(:pid_from, "Copy from Project") %><%= select_tag(:pid_from, options_for_select(@from_project_array), include_blank: true) %> 
   <%= label_tag(:release_from, "Copy from Release") %> <%= select_tag(:release_from) %> 
   <%= label_tag(:rid_from, "Copy from Role") %><%= select_tag(:rid_from) %>  
-  <%= label_tag(:rid_to, "Copy to Role") %><%= select_tag(:rid_to, options_for_select(@to_role_array)) %>  
-  <%= label_tag(:release_to, "Copy to Release") %><%= select_tag(:release_to, options_for_select(@to_release)) %>
+  <%= label_tag(:rid_to, "Copy to Role") %><%= select_tag(:rid_to, options_for_select(@to_role_array), include_blank: true) %>  
+  <%= label_tag(:release_to, "Copy to Release") %><%= select_tag(:release_to, options_for_select(@to_release), include_blank: true) %>
   
   
 <table class="table table-striped">

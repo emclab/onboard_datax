@@ -27,10 +27,16 @@ module OnboardDatax
       c.should_not be_valid
     end
     
-    it "should reject dup engine_config_id for one project" do
+    it "should reject dup engine_config_id for one project and release" do
       c1 = FactoryGirl.create(:onboard_datax_onboard_search_stat_config)
       c = FactoryGirl.build(:onboard_datax_onboard_search_stat_config, :project_id => c1.project_id)
       c.should_not be_valid
+    end
+    
+    it "should reject dup engine_config_id for one project and different release" do
+      c1 = FactoryGirl.create(:onboard_datax_onboard_search_stat_config)
+      c = FactoryGirl.build(:onboard_datax_onboard_search_stat_config, :project_id => c1.project_id, release_id: c1.release_id + 1)
+      c.should be_valid
     end
   end
 end

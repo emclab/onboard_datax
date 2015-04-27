@@ -24,7 +24,7 @@ module OnboardDatax
     belongs_to :release, :class_name => OnboardDatax.project_misc_definition_class.to_s
     
     validates :project_id, :engine_config_id, :engine_id, :release_id, :presence => true, :numericality => {:only_integer => true, :greater_than => 0}
-    validates :engine_config_id, :uniqueness => {:scope => :project_id, :case_sensitive => false, :message => I18n.t('Duplicate Config')}
+    validates :engine_config_id, :uniqueness => {:scope => [:project_id, :release_id], :case_sensitive => false, :message => I18n.t('Duplicate Config')}
     
     #cnovert to csv
     def self.to_csv

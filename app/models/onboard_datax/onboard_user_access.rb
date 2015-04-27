@@ -25,7 +25,7 @@ module OnboardDatax
     
     validates :project_id, :user_access_id, :engine_id, :role_definition_id, :release_id, :presence => true, 
               :numericality => {:only_integer => true, :greater_than => 0}
-    validates :user_access_id, :uniqueness => {:scope => [:project_id, :role_definition_id], :case_sensitive => false, :message => I18n.t('Duplicate Access')}
+    validates :user_access_id, :uniqueness => {:scope => [:project_id, :role_definition_id, :release_id], :case_sensitive => false, :message => I18n.t('Duplicate Access')}
     
     #cnovert to csv
     def self.to_csv

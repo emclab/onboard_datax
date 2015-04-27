@@ -32,10 +32,16 @@ module OnboardDatax
       c.should_not be_valid
     end
     
-    it "should reject dup user_access_id for one project & role id" do
+    it "should reject dup user_access_id for one project & role id and release" do
       c1 = FactoryGirl.create(:onboard_datax_onboard_user_access)
       c = FactoryGirl.build(:onboard_datax_onboard_user_access, :project_id => c1.project_id)
       c.should_not be_valid
+    end
+    
+    it "should reject dup user_access_id for one project & role id and different release" do
+      c1 = FactoryGirl.create(:onboard_datax_onboard_user_access)
+      c = FactoryGirl.build(:onboard_datax_onboard_user_access, :project_id => c1.project_id, release_id: c1.release_id + 1)
+      c.should be_valid
     end
   end
 end
