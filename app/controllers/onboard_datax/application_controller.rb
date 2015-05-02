@@ -27,11 +27,15 @@ module OnboardDatax
     end
     
     #engine's
-    def engine_boarded(models)
-      engine_boarded = ''
-      models.each do |r|
-        engine = OnboardDatax.engine_class.find_by_id(r.engine_id)
-        engine_boarded += ' ' + engine.name unless engine_boarded.include?(engine.name)
+    def engine_boarded(models, releases)
+      engine_boarded = {}
+      releases.each do |rls|
+        engine_list = ''
+        models.where(release_id: rls.id).each do |r|
+          engine = OnboardDatax.engine_class.find_by_id(r.engine_id)
+          engine_list += ' ' + engine.name unless engine_list.include?(engine.name)
+        end
+        engine_boarded[rls.name] = engine_list
       end
       return engine_boarded
     end
