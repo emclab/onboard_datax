@@ -1,3 +1,3 @@
 module OnboardDatax
-  VERSION = "3.2.12.22"
+  VERSION = "3.2.12.23"
 end
