@@ -12,7 +12,7 @@ module OnboardDatax
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.engine_id = ?', @engine.id) if @engine
       @onboard_user_accesses = @onboard_user_accesses.where('onboard_datax_onboard_user_accesses.release_id = ?', @release.id) if @release
       @erb_code = find_config_const('onboard_user_access_index_view', 'onboard_datax')
-      @engine_boarded = engine_boarded(@onboard_user_accesses, OnboardDatax.project_misc_definition_class.where('project_id = ? AND definition_category = ?', @project.id, 'release'))
+      @engine_boarded = engine_boarded(@onboard_user_accesses, OnboardDatax.project_misc_definition_class.where('project_id = ? AND definition_category = ?', @project.id, 'release')) if @project
       #for csv download
       respond_to do |format|
         format.html {@onboard_user_accesses = @onboard_user_accesses.page(params[:page]).per_page(@max_pagination)}
