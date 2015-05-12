@@ -10,7 +10,9 @@
   <%= f.input :config_desp, :label => t('Config Desp'), :readonly => true, :input_html => {:value => @search_stat_config.config_desp} %> 
   <%= f.input :resource_name, :label => t('Resource Name'), :readonly => true, :input_html => {:value => @search_stat_config.resource_name} %>
   <%= f.input :stat_function, :label => t('Stat Function'), :readonly => true, :input_html => {:value => @search_stat_config.stat_function} %> 
+  <%= f.input :custom_stat_function, :label => t('Custom Stat Function'), :input_html => {rows: 8} %> 
   <%= f.input :labels_and_fields, :label => t('Labels/Fields'), :readonly => true, :input_html => {:value => @search_stat_config.labels_and_fields} %>   
+  <%= f.input :custom_labels_and_fields, :label => t('Custom Labels/Fields'), :input_html => {rows: 8} %>   
   <%= f.input :search_where, :label => t('Search Where'), :readonly => true, :input_html => {:value => @search_stat_config.search_where} %> 
   <%= f.input :stat_summary_function, :label => t('Stat Summary Function'), :readonly => true, :input_html => {:value => @search_stat_config.stat_summary_function, :rows => 4}, as: :text %> 
   <%= f.input :custom_stat_summary_function, :label => t('Custom Stat Summary Function'), :input_html => {:rows => 8} %> 
@@ -19,8 +21,10 @@
   <%= f.input :search_summary_function, :label => t('Seach Summary Function'), :readonly => true, :input_html => {:value => @search_stat_config.search_summary_function, :rows => 4}, as: :text %> 
   <%= f.input :custom_search_summary_function, :label => t('Custom Seach Summary Function'), :input_html => {:rows => 4} %> 
   <%= f.input :time_frame, :label => t('Time Frame'), :readonly => true, :input_html => {:value => @search_stat_config.time_frame} %>
+  <%= f.input :custom_time_frame, :label => t('Custom Time Frame') %>
   <%= f.input :search_list_form, :label => t('List Form Name'), :readonly => true, :input_html => {:value => @search_stat_config.search_list_form} %>
   <%= f.input :search_results_period_limit, :label => t('Seach Results Period SQL'), :readonly => true, :input_html => {:value => @search_stat_config.search_results_period_limit} %> 
+  <%= f.input :custom_search_results_period_limit, :label => t('Custom Seach Results Period SQL'), :input_html => {rows: 2} %> 
   <%= f.input :search_params, :label => t('Search Params'), :readonly => true, :input_html => {:value => @search_stat_config.search_params} %>
   <%= f.input :brief_note, :label => t('Brief Note'), :readonly => true, :input_html => {:value => @search_stat_config.brief_note} %> 
   

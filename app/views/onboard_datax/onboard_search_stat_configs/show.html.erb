@@ -32,7 +32,7 @@
 </p>
 <p>
   <b><%=t('Labels/Fields') %></b>
-  <%= @search_stat_config.labels_and_fields %>
+  <%= @onboard_search_stat_config.custom_labels_and_fields.present? ? @onboard_search_stat_config.custom_labels_and_fields : @search_stat_config.labels_and_fields %>
 </p>
 <p>
   <b><%=t('Search Where') %></b>
@@ -40,7 +40,7 @@
 </p>
 <p>
   <b><%=t('Stat Function') %></b>
-  <%= @search_stat_config.stat_function %>
+  <%= @onboard_search_stat_config.custom_stat_function.present? ? @onboard_search_stat_config.custom_stat_function : @search_stat_config.stat_function %>
 </p>
 <p>
   <b><%=t('Search Summary Function') %></b>
@@ -68,7 +68,7 @@
 </p>
 <p>
   <b><%=t('Time Frame') %></b>
-  <%= @search_stat_config.time_frame %>
+  <%= @onboard_search_stat_config.custom_time_frame.present? ? @onboard_search_stat_config.custom_time_frame : @search_stat_config.time_frame %>
 </p>
 <p>
   <b><%=t('List Form Name') %></b>
@@ -76,7 +76,7 @@
 </p>
 <p>
   <b><%=t('Search Results Period SQL') %></b>
-  <%= @search_stat_config.search_results_period_limit %>
+  <%= @onboard_search_stat_config.custom_search_results_period_limit.present? ? @onboard_search_stat_config.custom_search_results_period_limit : @search_stat_config.search_results_period_limit %>
 </p>
 <p>
   <b><%=t('Search Params') %></b>

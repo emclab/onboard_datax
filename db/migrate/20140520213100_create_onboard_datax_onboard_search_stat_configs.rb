@@ -10,6 +10,10 @@ class CreateOnboardDataxOnboardSearchStatConfigs < ActiveRecord::Migration
       t.integer :engine_id
       t.timestamps
       t.integer :release_id
+      t.text :custom_labels_and_fields
+      t.string :custom_time_frame
+      t.text :custom_stat_function
+      t.text :custom_search_results_period_limit
     end
     
     add_index :onboard_datax_onboard_search_stat_configs, :project_id

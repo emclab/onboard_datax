@@ -6,11 +6,12 @@ module OnboardDatax
     attr_accessible :project_id, :search_stat_config_id, :custom_stat_header, :custom_search_summary_function, :custom_stat_summary_function, :release_id,
                     :engine_id, :engine_name, :project_name, :brief_note, :config_desp, :engine_id, :labels_and_fields, :resource_name, :search_list_form, 
                     :search_params, :search_results_period_limit, :search_summary_function, :search_where, :stat_function, :stat_header, :stat_summary_function, 
-                    :time_frame, :project_name,
+                    :time_frame, :project_name, :custom_stat_function, :custom_search_results_period_limit, :custom_time_frame, :custom_labels_and_fields,
                     :as => :role_new
     attr_accessible :last_updated_by_name, :custom_stat_header, :custom_search_summary_function, :brief_note, :config_desp, :engine_id, :labels_and_fields, :release_id, 
                     :resource_name, :search_list_form, :search_params, :search_results_period_limit, :search_summary_function, :search_where, :stat_function, 
                     :stat_header, :stat_summary_function, :time_frame, :custom_stat_summary_function, :engine_name, :project_name,
+                    :custom_stat_function, :custom_search_results_period_limit, :custom_time_frame, :custom_labels_and_fields,
                     :as => :role_update
     
     attr_accessor :start_date_s, :end_date_s, :resource_name_s, :engine_id_s, :config_desp_s, :project_id_s, :custom_code_s, :release_id_s
@@ -41,13 +42,13 @@ module OnboardDatax
           row = Array.new
           row << i
           row << base.resource_name
-          row << base.stat_function
+          row << (config.custom_stat_function.present? ? config.custom_stat_function : base.stat_function)
           row << (config.custom_stat_summary_function.present? ? config.custom_stat_summary_function : base.stat_summary_function)
-          row << base.labels_and_fields
-          row << base.time_frame
+          row << (config.custom_labels_and_fields.present? ? config.custom_labels_and_fields : base.labels_and_fields)
+          row << (config.custom_time_frame.present? ? config.custom_time_frame : base.time_frame)
           row << base.search_list_form
           row << base.search_where
-          row << base.search_results_period_limit
+          row << (config.custom_search_results_period_limit.present? ? config.custom_search_results_period_limit : base.search_results_period_limit)
           row << config.last_updated_by_id
           row << base.brief_note
           row << config.created_at

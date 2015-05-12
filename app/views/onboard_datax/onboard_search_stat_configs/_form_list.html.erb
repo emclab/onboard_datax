@@ -44,13 +44,13 @@
   	<td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{onboard_search_stat_config_path(r)}"  %></td> 
   	<td><%= r.release.name if r.release_id.present? %></td>	
     <td><%= base_config.resource_name %></td>
-  	<td><%= base_config.stat_function %></td>	
+  	<td><%= r.custom_stat_function.present? ? r.custom_stat_function : base_config.stat_function %></td>	
     <td><%= r.custom_stat_summary_function.present? ? r.custom_stat_summary_function[0..5] : base_config.stat_summary_function[0..5] %></td>
-    <td><%= base_config.labels_and_fields %></td>	
-    <td><%= base_config.time_frame %></td>	
+    <td><%= r.custom_labels_and_fields.present? ? r.custom_lables_and_fields : base_config.labels_and_fields %></td>	
+    <td><%= r.custom_time_frame.present? ? r.custom_time_frame : base_config.time_frame %></td>	
     <td><%= base_config.search_list_form %></td>	
     <td><%= base_config.search_where %></td>	
-    <td><%= base_config.search_results_period_limit %></td>	
+    <td><%= r.custom_search_results_period_limit.present? ? r.custom_search_results_period_limit : base_config.search_results_period_limit %></td>	
     <td><%= r.last_updated_by.name %></td> 
     <td><%= base_config.brief_note  %></td>
     <td><%= r.created_at %></td>
