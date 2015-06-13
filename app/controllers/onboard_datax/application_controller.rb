@@ -33,7 +33,7 @@ module OnboardDatax
         engine_list = ''
         models.where(release_id: rls.id).each do |r|
           engine = OnboardDatax.engine_class.find_by_id(r.engine_id)
-          engine_list += ' ' + engine.name unless engine_list.include?(engine.name)
+          engine_list += ' ' + engine.name + '-#' + models.where(release_id: rls.id, engine_id: r.engine_id).count.to_s unless engine_list.include?(engine.name)
         end
         engine_boarded[rls.name] = engine_list
       end
