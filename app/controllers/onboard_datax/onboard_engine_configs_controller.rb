@@ -80,25 +80,35 @@ module OnboardDatax
     def copy
       @title = t('Copy from Another Project')
       @from_projects = OnboardDatax.project_class.where('id != ?', @project.id).order('id DESC')
+      engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
+      @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
+      @to_release = OnboardDatax.project_misc_definition_class.where(definition_category: 'release').where(project_id: @project.id).map{|r| [r.name, r.id]}
       @erb_code = find_config_const('onboard_engine_config_copy_view', 'onboard_datax')
+      @js_erb_code = find_config_const('onboard_engine_config_copy_view_field', 'onboard_datax')
     end
     
     def copy_results
       project_id = params[:save].keys[0]
-      OnboardDatax::OnboardEngineConfig.where(project_id: params['single_id'].sub(/,\d+/, '').to_i).each do |base|
+      from_project_id = params[:pid_from].to_i if params[:pid_from].present?
+      from_engine = params[:from_engine].to_i if params[:from_engine]
+      release_from = params[:release_from].to_i if params[:release_from]
+      release_to = params[:release_to].to_i if params[:release_to]
+      to_engine = params[:to_engine].to_i if params[:to_engine]
+      OnboardDatax::OnboardEngineConfig.where('onboard_datax_onboard_engine_configs.project_id = ? AND onboard_datax_onboard_engine_configs.engine_id = ? AND release_id = ?', 
+                                              from_project_id, from_engine, release_from).each do |base|
         onboard_item = OnboardDatax::OnboardEngineConfig.new
         onboard_item.engine_config_id = base.engine_config_id
         onboard_item.engine_id = base.engine_id
         onboard_item.project_id = project_id
         onboard_item.custom_argument_value = base.custom_argument_value
         onboard_item.last_updated_by_id = session[:user_id]
-        onboard_item.release_id = params[:single_id].sub(/\d+,/,'').to_i
+        onboard_item.release_id = release_to
         begin
           onboard_item.save
         rescue => e
           flash[:notice] = 'Base#=' + base.id.to_s  + ',' + e.message
         end
-      end unless params['single_id'].blank?
+      end if project_id && from_project_id && from_engine  && release_from && release_to && to_engine && (from_engine == to_engine)
       redirect_to  SUBURI + "/view_handler?index=1&url=#{onboard_engine_configs_path(project_id: project_id)}"
     end
     

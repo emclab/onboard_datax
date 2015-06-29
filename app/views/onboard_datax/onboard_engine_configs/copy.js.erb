@@ -1,0 +1,22 @@
+<% if @view_in_config && @js_erb_code %>
+  <%= render inline: ERB.new(@js_erb_code).result(binding) %>
+  
+<% else %>
+
+<% if params[:pid_from].present? && params[:pid_from].to_i > 0 %>
+  $('#from_engine').empty();
+  $('#from_engine').append('<option value=""></option>');
+  <% ResourceAllocx::Allocation.where(:active => true, :resource_id => params[:pid_from].to_i, :resource_string => 'info_service_projectx/projects').each do |r| %>
+    $('#from_engine').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
+  <% end %>
+  $('#release_from').empty();
+  $('#release_from').append('<option value=""></option>');
+  <% OnboardDatax.project_misc_definition_class.where(project_id: params[:pid_from].to_i).where(definition_category: 'release').each do |r| %>
+    $('#release_from').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
+  <% end %>
+<% else %>
+  $('#from_engine').empty();  
+  $('#release_from').empty();
+<% end %>
+
+<% end %>

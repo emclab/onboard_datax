@@ -80,7 +80,7 @@ module OnboardDatax
     def copy
       @title = t('Copy from Another Project')
       @from_projects = OnboardDatax.project_class.order('id DESC')
-      @from_project_array = @from_projects.select('id, name').map{|r| [r.name, r.id]}
+      @from_project_array = @from_projects.map{|r| [r.name, r.id]}
       engine_ids = eval(OnboardDatax.engine_ids_belong_to_a_project) #if @project_id #engine_id
       @engines = OnboardDatax.engine_class.where(active: true).where(:id => engine_ids).order('name')
       @to_role_array = OnboardDatax.project_misc_definition_class.where('definition_category = ? AND project_id = ?', 'role_definition', @project.id).select('id, name').map{|r| [r.name, r.id]}
