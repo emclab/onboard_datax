@@ -5,6 +5,13 @@ $(function() {
 	$( "#onboard_engine_config_end_date_s" ).datepicker({dateFormat: 'yy-mm-dd'});
 });
 
+$(function (){
+	$('#pid_from').change(function(){
+      $.get(window.location, $('form').serialize(), null, "script");
+  	  return false;
+	});
+});
+
 // for search
 $(function (){
 	$('#onboard_engine_config_project_id_s').change(function(){
