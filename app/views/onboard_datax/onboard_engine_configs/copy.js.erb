@@ -6,7 +6,8 @@
 <% if params[:pid_from].present? && params[:pid_from].to_i > 0 %>
   $('#from_engine').empty();
   $('#from_engine').append('<option value=""></option>');
-  <% ResourceAllocx::Allocation.where(:active => true, :resource_id => params[:pid_from].to_i, :resource_string => 'info_service_projectx/projects').each do |r| %>
+  <% engine_ids = ResourceAllocx::Allocation.where(:active => true, :resource_id => params[:pid_from].to_i, :resource_string => 'info_service_projectx/projects').pluck('detailed_resource_id')%>
+  <% SwModuleInfox::ModuleInfo.where(id => engine_ids).each do |r| %>
     $('#from_engine').append('<option value="<%=r.id%>"><%= "#{r.name}" %></option>');
   <% end %>
   $('#release_from').empty();
